@@ -1,0 +1,8 @@
+club_id: 205
+user: '0527206014'
+password: 'dana1234'
+user_schedule:
+  - lesson_id: '10126'
+    seats: 8 33 32
+  - lesson_id: '10130'
+    seats: 30 31 32

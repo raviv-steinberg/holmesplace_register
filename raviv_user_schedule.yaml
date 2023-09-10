@@ -1,0 +1,10 @@
+club_id: 205
+user: '0547558333'
+password: '12345678'
+user_schedule:
+#  - lesson_id: '10126'
+#    seats: 8 1
+#  - lesson_id: '10130'
+#    seats: 30 31 32
+  - lesson_id: '10099'
+    seats: 9 12

@@ -1,0 +1,196 @@
+clubs:
+  205:
+    pilates:
+      - day: sunday
+        type: pilates
+        start_time: '7:30'
+        registration_day: friday
+        registration_start_time: '7:30'
+        lesson_id: '10152'
+        instructor_id: '27'
+      - day: sunday
+        type: pilates
+        start_time: '8:30'
+        registration_day: friday
+        registration_start_time: '8:30'
+        lesson_id: '10223'
+        instructor_id: '27'
+      - day: monday
+        type: pilates
+        start_time: '8:30'
+        registration_day: sunday
+        registration_start_time: '8:30'
+        lesson_id: '10099'
+        instructor_id: '27'
+      - day: tuesday
+        type: pilates
+        start_time: '16:15'
+        registration_day: tuesday
+        registration_start_time: '14:15'
+        lesson_id: '10044'
+        instructor_id: '27'
+      - day: tuesday
+        type: pilates
+        start_time: '17:15'
+        registration_day: tuesday
+        registration_start_time: '15:15'
+        lesson_id: '10081'
+        instructor_id: '27'
+      - day: thursday
+        type: pilates
+        start_time: '9:30'
+        registration_day: wednesday
+        registration_start_time: '9:30'
+        lesson_id: '10042'
+        instructor_id: '351'
+      - day: friday
+        type: pilates
+        start_time: '8:30'
+        registration_day: thursday
+        registration_start_time: '8:30'
+        lesson_id: '10015'
+        instructor_id: '273'
+      - day: saturday
+        type: pilates
+        start_time: '11:30'
+        registration_day: friday
+        registration_start_time: '11:30'
+        lesson_id: '10338'
+        instructor_id: '273'
+    spinning:
+      - day: sunday
+        type: spinning
+        registration_day: friday
+        start_time: '8:30'
+        registration_start_time: '8:30'
+        lesson_id: '10006'
+        instructor_id: '36'
+      - day: sunday
+        type: spinning
+        start_time: '19:30'
+        registration_day: sunday
+        registration_start_time: '17:30'
+        lesson_id: '10136'
+        instructor_id: '351'
+      - day: monday
+        type: spinning
+        start_time: '8:30'
+        registration_day: sunday
+        registration_start_time: '19:30'
+        lesson_id: '10117'
+        instructor_id: '50'
+      - day: monday
+        type: spinning
+        start_time: '19:00'
+        registration_day: monday
+        registration_start_time: '17:00'
+        lesson_id: '10124'
+        instructor_id: '50'
+      - day: tuesday
+        type: spinning
+        start_time: '8:30'
+        registration_day: tuesday
+        registration_start_time: '18:30'
+        lesson_id: '10116'
+        instructor_id: '27'
+      - day: tuesday
+        type: spinning
+        start_time: '19:00'
+        registration_day: tuesday
+        registration_start_time: '17:00'
+        lesson_id: '10330'
+        instructor_id: '27'
+      - day: wednesday
+        type: spinning
+        start_time: '8:15'
+        registration_day: tuesday
+        registration_start_time: '20:15'
+        lesson_id: '10128'
+        instructor_id: '351'
+      - day: wednesday
+        type: spinning
+        start_time: '19:30'
+        registration_day: wednesday
+        registration_start_time: '17:30'
+        lesson_id: '10121'
+        instructor_id: '50'
+      - day: thursday
+        type: spinning
+        start_time: '8:30'
+        registration_day: wednesday
+        registration_start_time: '18:30'
+        lesson_id: '10122'
+        instructor_id: '50'
+      - day: thursday
+        type: spinning
+        start_time: '20:00'
+        registration_day: thursday
+        registration_start_time: '18:00'
+        lesson_id: '10160'
+        instructor_id: '351'
+      - day: friday
+        type: spinning
+        start_time: '8:30'
+        registration_day: thursday
+        registration_start_time: '18:30'
+        lesson_id: '10127'
+        instructor_id: '273'
+      - day: saturday
+        type: spinning
+        start_time: '10:00'
+        registration_day: friday
+        registration_start_time: '19:00'
+        lesson_id: '10130'
+        instructor_id: '27'
+      - day: saturday
+        type: spinning
+        start_time: '11:00'
+        registration_day: friday
+        registration_start_time: '20:00'
+        lesson_id: '10126'
+        instructor_id: '27'
+    yoga:
+      - day: wednesday
+        type: yoga
+        start_time: '8:30'
+        registration_day: tuesday
+        registration_start_time: '8:30'
+        lesson_id: '10025'
+        instructor_id: '50'
+      - day: saturday
+        type: yoga
+        start_time: '9:15'
+        registration_day: friday
+        registration_start_time: '9:15'
+        lesson_id: '10173'
+        instructor_id: '273'
+    shape:
+      - day: monday
+        type: shape
+        start_time: '7:30'
+        registration_day: sunday
+        registration_start_time: '7:30'
+        lesson_id: '10161'
+        instructor_id: '351'
+      - day: thursday
+        type: shape
+        start_time: '8:30'
+        registration_day: wednesday
+        registration_start_time: '8:30'
+        lesson_id: '10179'
+        instructor_id: '351'
+      - day: saturday
+        type: shape
+        start_time: '9:30'
+        registration_day: friday
+        registration_start_time: '9:30'
+        lesson_id: '10100'
+        instructor_id: '27'
+    health_exercise:
+      - day: saturday
+        type: health_exercise
+        start_time: '10:30'
+        registration_day: friday
+        registration_start_time: '10:30'
+        lesson_id: '10113'
+        instructor_id: '27'

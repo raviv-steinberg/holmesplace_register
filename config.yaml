@@ -1,0 +1,10 @@
+base_url: https://www.holmesplace.co.il
+
+urls:
+  login: '{base_url}/api.php?action=login'
+  logout: '{base_url}/api.php?action=logout'
+  available_seats: '{base_url}/api.php?action=getAvailableSeats'
+  register_to_lesson_with_seat: '{base_url}/api.php?action=registerToLessonWithSeat'
+  register_to_lesson: '{base_url}/api.php?action=registerToLesson'
+  register: '{base_url}/api.php?action=register'
+  unregister: '{base_url}/api.php?action=unRegisterToLesson'
