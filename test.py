@@ -12,7 +12,7 @@ from src.utils.lesson_registration_manager_factory import LessonRegistrationMana
 # user = '0506291251'
 # password = 'yaron1357'
 
-source_user_data_file = 'raviv_user_schedule.yaml'
+source_user_data_file = 'users_data/raviv_user_schedule.yaml'
 
 user_lesson_scheduler_service = UserLessonSchedulerService(source_user_data_file=source_user_data_file)
 
