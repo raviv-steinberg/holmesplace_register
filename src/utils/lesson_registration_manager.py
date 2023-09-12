@@ -5,9 +5,12 @@ Date: 04/09/2023
 import json
 import random
 import time
+
+import pause
 from requests import Response
 from src.common.holmes_place_api import HolmesPlaceAPI
 from src.exceptions.bike_occupied_exception import BikeOccupiedException
+from src.exceptions.lesson_not_found_exception import LessonNotFoundException
 from src.exceptions.lesson_not_open_for_registration import LessonNotOpenForRegistrationException
 from src.exceptions.lesson_time_does_not_exist import LessonTimeDoesNotExistException
 from src.exceptions.multiple_devices_connection_exception import MultipleDevicesConnectionException
@@ -16,6 +19,7 @@ from src.exceptions.no_matching_subscription import NoMatchingSubscriptionExcept
 from src.exceptions.registration_for_this_lesson_already_exists import RegistrationForThisLessonAlreadyExistsException
 from src.exceptions.registration_timeout_exception import RegistrationTimeoutException
 from src.exceptions.user_preferred_seats_occupied_exception import UserPreferredSeatsOccupiedException
+from src.utils.date_utils import DateUtils
 from src.utils.logger_manager import LoggerManager
 
 
@@ -85,6 +89,7 @@ class LessonRegistrationManager:
     def __do_work(self):
         try:
             self.login()
+            self.__wait_n_seconds_before_registration_start(seconds_before=60)
             self.logger.info(f'lesson details: {self.lesson}')
             self.logger.info(msg=f'User\'s preferred seats: {self.seats}')
             seat = self.__get_first_priority_seat()
@@ -96,13 +101,21 @@ class LessonRegistrationManager:
             except Exception as ex:
                 raise ex
             self.__register()
+        except (LessonNotFoundException, LessonNotOpenForRegistrationException, LessonTimeDoesNotExistException,
+                MultipleDevicesConnectionException, NoAvailableSeatsException, NoMatchingSubscriptionException,
+                RegistrationForThisLessonAlreadyExistsException, RegistrationTimeoutException, UserPreferredSeatsOccupiedException) as ex:
+            self.logger.error(ex)
         except Exception as ex:
             self.logger.exception(ex)
         finally:
             self.logout()
 
-    def __wait_n_seconds_before_registration_start(self) -> None:
-        pass
+    def __wait_n_seconds_before_registration_start(self, seconds_before: int) -> None:
+        self.logger.debug(msg=f'Initial registration start time: {self.lesson["registration_start_time"]}. Planning to pause {seconds_before} seconds before it.')
+        target = DateUtils.get_target_time(time=self.lesson['registration_start_time'], seconds_before=seconds_before)
+        self.logger.debug(msg=f'Pausing until {target} ({seconds_before} seconds before registration starts).')
+        pause.until(time=target)
+        self.logger.debug(msg=f'Resumed execution. Current time: {DateUtils.current_time()}')
 
     def __register(self) -> bool:
         """
@@ -169,15 +182,10 @@ class LessonRegistrationManager:
                 return
             except LessonNotOpenForRegistrationException as ex:
                 self.logger.warning(ex)
-            except LessonTimeDoesNotExistException:
-                raise
-            except RegistrationForThisLessonAlreadyExistsException:
-                raise
-            except NoMatchingSubscriptionException:
+            except (LessonTimeDoesNotExistException, RegistrationForThisLessonAlreadyExistsException, NoMatchingSubscriptionException):
                 raise
             except Exception as ex:
                 self.logger.error(ex)
-        self.logger.error(f'Could not register within {timeout} minute(s).')
         raise RegistrationTimeoutException(f'Could not register for lesson within {timeout} minute(s).')
 
     def __try_to_register_lesson(self, seat: int) -> bool:

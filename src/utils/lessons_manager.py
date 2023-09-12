@@ -32,7 +32,7 @@ class LessonsManager:
         :param club_id: int: Club ID (e.g., 205).
         :param lesson_type: str: Type of the lesson (e.g., 'pilates', 'spinning').
         :param day_of_week: str: Day of the week (e.g., 'sunday', 'monday').
-        :param time: str: Start time of the lesson (e.g., '7:30').
+        :param time: str: Start time of the lesson in "HH:MM" format  (e.g., '7:30').
         :return: dict: A dictionary containing the details of the matched lesson.
         """
         club_data = self.lessons['clubs'][club_id]

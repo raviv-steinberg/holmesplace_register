@@ -84,15 +84,8 @@ clubs:
         start_time: '19:00'
         registration_day: monday
         registration_start_time: '17:00'
-        lesson_id: '10124'
+        lesson_id: '10121'
         instructor_id: '50'
-      - day: tuesday
-        type: spinning
-        start_time: '8:30'
-        registration_day: tuesday
-        registration_start_time: '18:30'
-        lesson_id: '10116'
-        instructor_id: '27'
       - day: tuesday
         type: spinning
         start_time: '19:00'

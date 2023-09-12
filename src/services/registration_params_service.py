@@ -41,4 +41,5 @@ class RegistrationParamsService:
         params['date'] = DateUtils.next_weekday(date_time=datetime.date.today(), weekday=lesson['day']).strftime('%Y/%m/%d')
         params['start_time'] = DateUtils.format_time(time=lesson['start_time'])
         params['instructor_id'] = lesson['instructor_id']
+        params['registration_start_time'] = lesson['registration_start_time']
         return params

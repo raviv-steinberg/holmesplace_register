@@ -6,7 +6,6 @@ from src.common.holmes_place_api import HolmesPlaceAPI
 from src.services.registration_params_service import RegistrationParamsService
 from src.utils.lesson_registration_manager import LessonRegistrationManager
 from src.utils.lessons_manager import LessonsManager
-from src.utils.logger_manager import LoggerManager
 from src.utils.yaml_reader import YAMLReader
 
 
