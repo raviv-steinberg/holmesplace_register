@@ -5,7 +5,6 @@ Date: 04/09/2023
 import json
 import random
 import time
-
 import pause
 from requests import Response
 from src.common.holmes_place_api import HolmesPlaceAPI
@@ -46,18 +45,6 @@ class LessonRegistrationManager:
         Registers the user for the specified lesson by either priority or random seat choice.
         :return: None
         """
-        # self.login()
-        # self.logger.info(f'lesson details: {self.lesson}')
-        # self.logger.info(msg=f'User\'s preferred seats: {self.seats}')
-        # seat = self.__get_first_priority_seat()
-        # try:
-        #     self.__wait_until_registration_starts(seat=seat)
-        #     return
-        # except BikeOccupiedException:
-        #     self.logger.warning(msg=f'Preferred seat {seat} is occupied.')
-        # except Exception as ex:
-        #     raise ex
-        # self.__register()
         self.__do_work()
 
     def login(self):
@@ -80,11 +67,10 @@ class LessonRegistrationManager:
         :return: None
         """
         if self._is_logged_in:
-            self.logger.debug(f'Attempting logout for user: {self.user}.')
-            time.sleep(5)
+            time.sleep(2)
             self.api.logout()
             self._is_logged_in = False
-            self.logger.info(f'Successfully logged out user: {self.user}.')
+            self.logger.info(f'User \'{self.user}\' successfully logged out.')
 
     def __do_work(self):
         try:
@@ -166,7 +152,7 @@ class LessonRegistrationManager:
             available_seats = self.__extract_available_seats(response=self.api.get_available_seats(params=self.lesson))
         raise Exception('Failed to register for the lesson.')
 
-    def __wait_until_registration_starts(self, seat: int, timeout: int = 5) -> None:
+    def __wait_until_registration_starts(self, seat: int, timeout: int = 1) -> None:
         """
         Waits until the lesson registration begins.
         :param seat: int: The seat number to register with.
@@ -186,7 +172,7 @@ class LessonRegistrationManager:
                 raise
             except Exception as ex:
                 self.logger.error(ex)
-        raise RegistrationTimeoutException(f'Could not register for lesson within {timeout} minute(s).')
+        raise RegistrationTimeoutException(f'Failed to register for lesson \'{self.lesson["type"]}\'  within {timeout} minute(s).')
 
     def __try_to_register_lesson(self, seat: int) -> bool:
         """
@@ -241,7 +227,6 @@ class LessonRegistrationManager:
         """
         hebrew_message = "לא ניתן להתחבר עם אותו חשבון ממספר מכשירים"
         if error_msg == hebrew_message:
-            self.logger.error("Cannot log in with the same account from multiple devices.")
             raise MultipleDevicesConnectionException()
 
     @staticmethod

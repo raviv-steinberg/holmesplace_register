@@ -3,7 +3,6 @@ Author: raviv steinberg
 Date: 09/09/2023
 """
 from src.utils.lessons_manager import LessonsManager
-from src.utils.logger_manager import LoggerManager
 import json
 import subprocess
 import argparse
@@ -39,7 +38,7 @@ if __name__ == "__main__":
     parser.add_argument('--threshold', '-t', type=float, required=True, help='Threshold value in minutes')
     args = parser.parse_args()
 
-    lesson_id, minutes = ed_tuple = fetch_notifier_tuple()
+    lesson_id, minutes = fetch_notifier_tuple()
     if lesson_id and minutes:
         details = LessonsManager().retrieve_lesson_details(lesson_id=lesson_id)
         subprocess.Popen(['python3', REGISTER_LESSON_SCRIPT, '-f', args.user_data_file, '-l', lesson_id])

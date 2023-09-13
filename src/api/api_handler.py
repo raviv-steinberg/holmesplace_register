@@ -12,6 +12,7 @@ from src.exceptions.lesson_not_open_for_registration import LessonNotOpenForRegi
 from src.exceptions.lesson_time_does_not_exist import LessonTimeDoesNotExistException
 from src.exceptions.no_matching_subscription import NoMatchingSubscriptionException
 from src.exceptions.registration_for_this_lesson_already_exists import RegistrationForThisLessonAlreadyExistsException
+from src.utils.logger_manager import LoggerManager
 
 
 class ApiHandler:
@@ -49,10 +50,30 @@ class ApiHandler:
         :param kwargs: Any: (optional) Any additional keyword arguments to pass to the 'requests' library.
         :return: Any: The parsed JSON response from the server (if available).
         """
-        return ApiHandler.__handle_response(response=RequestHandler.make_request(method, url=url, **kwargs))
+        ApiHandler.__log_request(method=method, url=url, args=args, kwargs=kwargs)
+        response = ApiHandler.__handle_response(response=RequestHandler.make_request(method, url=url, **kwargs))
+        ApiHandler.__log_response(url=url, response=response)
+        return response
 
     @staticmethod
     def __handle_response(response: requests.Response) -> Any:
+        """
+        Processes and handles the given HTTP response from the API. This method specifically checks for certain
+        error codes within the response and raises corresponding exceptions based on the error encountered.
+        The method expects the response content to be in JSON format, containing potential keys like 'success' and 'error'.
+        :param response: The response object returned after making an HTTP request.
+        :returns: The parsed JSON data from the response, if successful.
+        :raises NoMatchingSubscriptionException: If the error in the response matches the
+        "No Matching Subscription Found" error code.
+        :raises LessonTimeDoesNotExistException: If the error in the response matches the
+        "Lesson Time Does Not Exist" error code.
+        :raises RegistrationForThisLessonAlreadyExistsException: If the error in the response matches the
+        "Registration For This Lesson Already Exists" error code.
+        :raises BikeOccupiedException: If the error in the response matches the "Bike Taken" error code.
+        :raises LessonNotOpenForRegistrationException: If the error in the response matches the
+        "Lesson Is Not Open For Registration" error code.
+        :raises Exception: For any other unexpected errors.
+        """
         # Convert response content to a JSON dictionary.
         data = ApiHandler.__parse_json_response(response=response)
         if data:
@@ -96,3 +117,36 @@ class ApiHandler:
             return response.json()
         except json.JSONDecodeError:
             return None
+
+    @staticmethod
+    def __log_request(method: str, url: str, *args: Any, **kwargs: Any) -> None:
+        """
+        Logs the details of an HTTP request.
+        :param method: HTTP method of the request (e.g., GET, POST).
+        :param url: The full URL endpoint for the request.
+        :param args: Any additional positional arguments (not used in this method, but kept for flexibility).
+        :param kwargs: Additional keyword arguments, typically parameters sent with the request.
+        :returns: None.
+        """
+        logger = LoggerManager().logger
+        log_data = {'Request Method': method, 'Request URL': url, 'Additional Params': kwargs}
+        log_data = {k: v for k, v in log_data.items() if v}
+        for key, value in log_data.items():
+            logger.debug(msg=f'{key}: {value}')
+
+    @staticmethod
+    def __log_response(url: str, response: requests.Response) -> None:
+        """
+        Logs the details of an HTTP response.
+        :param url: The full URL endpoint that the response is associated with.
+        :param response: The response object returned after making an HTTP request.
+        :returns: None.
+        """
+        logger = LoggerManager().logger
+        content = response.text
+        if '?action=logout' in url:
+            content = "Response for logout. Full content omitted for brevity."
+        log_data = {"Response Status": response.status_code, "Response Headers": dict(response.headers), "Response Content": content}
+        log_data = {k: v for k, v in log_data.items() if v}
+        for key, value in log_data.items():
+            logger.debug(msg=f'{key}: {value}')

@@ -21,7 +21,6 @@ class LoggerManager(metaclass=SingletonMeta):
         self.user = user
         if self.user is None:
             raise ValueError("User must be specified for LoggerManager")
-        filename = self.__create_directory_structure()
 
         config = {
             'version': 1,
@@ -35,7 +34,7 @@ class LoggerManager(metaclass=SingletonMeta):
                 'file_handler': {
                     'level': 'DEBUG',
                     'class': 'logging.handlers.RotatingFileHandler',
-                    'filename': filename,
+                    'filename': self.__create_directory_structure(),
                     'backupCount': 3,
                     'formatter': 'simple',
                 },
@@ -62,9 +61,7 @@ class LoggerManager(metaclass=SingletonMeta):
         :return: The full path for the log file.
         """
         now = datetime.now()
-        year_directory = f'./logs/{now.year}'
-        month_directory = f'{year_directory}/{now.strftime("%B")}'
-        date_directory = f'{month_directory}/{now.strftime("%d-%m-%Y")}'
+        date_directory = f'./logs/{now.year}/{now.strftime("%B")}/{now.strftime("%A-%d")}'
 
         # Create directories as needed.
         os.makedirs(date_directory, exist_ok=True)

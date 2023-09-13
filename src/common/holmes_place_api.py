@@ -2,6 +2,8 @@
 Author: raviv steinberg
 Date: 04/09/2023
 """
+import logging
+
 from requests import Response
 from src.api.api_handler import ApiHandler
 from src.utils.yaml_reader import YAMLReader
@@ -32,9 +34,10 @@ class HolmesPlaceAPI:
         :param user: str: The user's phone number or username.
         :param password: str: The user's password.
         """
+
         return ApiHandler.request(
             'POST',
-            self.config['urls']['login'].format(base_url=self.base_url),
+            url=self.config['urls']['login'].format(base_url=self.base_url),
             data=f'phone={user}&password={password}',
             headers={'content-type': 'application/x-www-form-urlencoded; charset=UTF-8'})
 
@@ -44,7 +47,7 @@ class HolmesPlaceAPI:
         """
         return ApiHandler.request(
             'POST',
-            self.config['urls']['logout'].format(base_url=self.base_url),
+            url=self.config['urls']['logout'].format(base_url=self.base_url),
             data='action=logout',
             headers={'content-type': 'text/html; charset=UTF-8'})
 
@@ -56,7 +59,7 @@ class HolmesPlaceAPI:
         """
         return ApiHandler.request(
             'POST',
-            self.config['urls']['available_seats'].format(base_url=self.base_url),
+            url=self.config['urls']['available_seats'].format(base_url=self.base_url),
             data=f'branchID={params["club_id"]}&lessonID={params["lesson_id"]}&date={params["date"]}&time={params["start_time"]}',
             headers={'content-type': 'application/x-www-form-urlencoded; charset=UTF-8'})
 
@@ -78,6 +81,7 @@ class HolmesPlaceAPI:
         """
         return ApiHandler.request(
             'POST',
-            self.config['urls']['register_to_lesson_with_seat'].format(base_url=self.base_url),
+            url=self.config['urls']['register_to_lesson_with_seat'].format(base_url=self.base_url),
             data=f'branchID={params["club_id"]}&lessonID={params["lesson_id"]}&date={params["date"]}&time={params["start_time"]}&instructorID={params["instructor_id"]}&seatID={seat}',
             headers={'content-type': 'application/x-www-form-urlencoded; charset=UTF-8'})
+
