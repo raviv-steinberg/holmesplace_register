@@ -2,9 +2,7 @@
 Author: raviv steinberg
 Date: 04/09/2023
 """
-import datetime
 from src.exceptions.lesson_not_found_exception import LessonNotFoundException
-from src.utils.date_utils import DateUtils
 from src.utils.lessons_loader import LessonsLoader
 
 
@@ -38,12 +36,7 @@ class LessonsManager:
         club_data = self.lessons['clubs'][club_id]
         for lesson in club_data.get(lesson_type, []):
             if lesson['day'] == day_of_week and lesson['start_time'] == time:
-                # Create a copy of the matched lesson dictionary.
-                lesson_copy = lesson.copy()
-                lesson_copy['club_id'] = club_id
-                lesson_copy['date'] = DateUtils.next_weekday(date_time=datetime.date.today(), weekday=lesson['day']).strftime('%Y/%m/%d')
-                lesson_copy['start_time'] = DateUtils.format_time(time=lesson['start_time'])
-                return lesson_copy
+                return lesson
         raise LessonNotFoundException(lesson_type=lesson_type, club_id=club_id, day_of_week=day_of_week, time=time)
 
     def retrieve_lesson_details(self, lesson_id: str) -> dict:

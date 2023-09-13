@@ -40,14 +40,14 @@ class UserLessonSchedulerService:
         """
         Converts a given value in minutes (as a float) to its equivalent in seconds (as an integer).
         :param minutes_float: float: Number of minutes.
-        :return: int: Equivalent value in seconds.
+        :return: Equivalent value in seconds.
         """
         return int(minutes_float * 60)
 
     def get_upcoming_lessons(self) -> list[tuple]:
         """
         Fetches upcoming lessons based on the user's choices and calculates time until the registration for each lesson.
-        :return: list[tuple]: List of tuples where each tuple consists of a lesson ID and the time in minutes until its registration.
+        :return: List of tuples where each tuple consists of a lesson ID and the time in minutes until its registration.
         """
         self.__read_user_choices()
         all_lessons = self.lessons_manager.get_all(club_id=self.club_id)
@@ -83,7 +83,7 @@ class UserLessonSchedulerService:
         Private method to calculate time in minutes from now until the specified day and time.
         :param registration_day: str: The day of registration.
         :param registration_time: time: The time of registration on the specified day.
-        :return: float: Time in minutes from now until the specified registration day and time.
+        :return: Time in minutes from now until the specified registration day and time.
         """
         now = datetime.now()
         target_weekday = self.WEEKDAYS.index(registration_day)
