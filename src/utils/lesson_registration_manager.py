@@ -97,7 +97,7 @@ class LessonRegistrationManager:
             self.logout()
 
     def __wait_n_seconds_before_registration_start(self, seconds_before: int) -> None:
-        self.logger.debug(msg=f'Initial registration start time: {self.lesson["registration_start_time"]}. Planning to pause {seconds_before} seconds before it.')
+        self.logger.debug(msg=f'\'{self.lesson["type"]}\' registration start time: {self.lesson["registration_start_time"]}.')
         target = DateUtils.get_target_time(time=self.lesson['registration_start_time'], seconds_before=seconds_before)
         self.logger.debug(msg=f'Pausing until {target} ({seconds_before} seconds before registration starts).')
         pause.until(time=target)
