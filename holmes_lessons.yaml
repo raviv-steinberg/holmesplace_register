@@ -43,6 +43,13 @@ clubs:
         registration_start_time: '9:30'
         lesson_id: '10042'
         instructor_id: '351'
+      - day: thursday
+        type: pilates
+        start_time: '18:30'
+        registration_day: thursday
+        registration_start_time: '16:30'
+        lesson_id: '10366'
+        instructor_id: '351'
       - day: friday
         type: pilates
         start_time: '8:30'
@@ -116,9 +123,9 @@ clubs:
         instructor_id: '50'
       - day: thursday
         type: spinning
-        start_time: '20:00'
+        start_time: '19:30'
         registration_day: thursday
-        registration_start_time: '18:00'
+        registration_start_time: '17:30'
         lesson_id: '10160'
         instructor_id: '351'
       - day: friday
@@ -127,6 +134,13 @@ clubs:
         registration_day: thursday
         registration_start_time: '18:30'
         lesson_id: '10127'
+        instructor_id: '273'
+      - day: friday
+        type: spinning
+        start_time: '9:45'
+        registration_day: thursday
+        registration_start_time: '19:45'
+        lesson_id: '10129'
         instructor_id: '273'
       - day: saturday
         type: spinning
@@ -172,6 +186,13 @@ clubs:
         registration_start_time: '8:30'
         lesson_id: '10179'
         instructor_id: '351'
+      - day: thursday
+        type: shape
+        start_time: '17:30'
+        registration_day: thursday
+        registration_start_time: '15:30'
+        lesson_id: '10170'
+        instructor_id: '351'
       - day: saturday
         type: shape
         start_time: '9:30'
@@ -186,4 +207,20 @@ clubs:
         registration_day: friday
         registration_start_time: '10:30'
         lesson_id: '10113'
+        instructor_id: '27'
+    feldenkrais:
+      - day: thursday
+        type: feldenkrais
+        start_time: '17:15'
+        registration_day: thursday
+        registration_start_time: '15:15'
+        lesson_id: '10021'
+        instructor_id: '27'
+    bodypump:
+      - day: thursday
+        type: bodypump
+        start_time: '19:15'
+        registration_day: thursday
+        registration_start_time: '17:15'
+        lesson_id: '10047'
         instructor_id: '27'
