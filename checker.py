@@ -2,6 +2,9 @@
 Author: raviv steinberg
 Date: 09/09/2023
 """
+import time
+
+from src.services.user_data_service import UserDataService
 from src.utils.lessons_manager import LessonsManager
 import json
 import subprocess
@@ -11,8 +14,9 @@ NOTIFY_REGISTRATION_SCRIPT = 'notify_registration.py'
 REGISTER_LESSON_SCRIPT = 'register_lesson.py'
 
 
-def fetch_notifier_tuple():
-    return tuple(json.loads(subprocess.check_output(f'python3 {NOTIFY_REGISTRATION_SCRIPT} -f {args.user_data_file} -t {args.threshold}', shell=True).decode("utf-8")))
+def fetch_notifier_tuple(file: str):
+    return_code, output = subprocess.getstatusoutput(cmd=f'python {NOTIFY_REGISTRATION_SCRIPT} -f {file} -t {args.threshold}')
+    return tuple(json.loads(output))
 
 
 if __name__ == "__main__":
@@ -34,11 +38,17 @@ if __name__ == "__main__":
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
+
     parser.add_argument('--user_data_file', '-f', type=str, required=True, help='User YAML data file')
     parser.add_argument('--threshold', '-t', type=float, required=True, help='Threshold value in minutes')
     args = parser.parse_args()
 
-    lesson_id, minutes = fetch_notifier_tuple()
+    user_data_service = UserDataService(filepath=args.user_data_file)
+    user_file = f'"{args.user_data_file}"'
+    lesson_id, minutes = fetch_notifier_tuple(file=user_file)
+
     if lesson_id and minutes:
-        details = LessonsManager().retrieve_lesson_details(lesson_id=lesson_id)
-        subprocess.Popen(['python3', REGISTER_LESSON_SCRIPT, '-f', args.user_data_file, '-l', lesson_id])
+        is_in_progress = user_data_service.is_registration_in_progress(lesson_id=lesson_id)
+        if not is_in_progress:
+            details = LessonsManager().retrieve_lesson_details(lesson_id=lesson_id)
+            subprocess.Popen(['python', REGISTER_LESSON_SCRIPT, '-f', args.user_data_file, '-l', lesson_id])

@@ -9,6 +9,7 @@ import pause
 from requests import Response
 from src.common.holmes_place_api import HolmesPlaceAPI
 from src.exceptions.bike_occupied_exception import BikeOccupiedException
+from src.exceptions.lesson_canceled_exception import LessonCanceledException
 from src.exceptions.lesson_not_found_exception import LessonNotFoundException
 from src.exceptions.lesson_not_open_for_registration import LessonNotOpenForRegistrationException
 from src.exceptions.lesson_time_does_not_exist import LessonTimeDoesNotExistException
@@ -88,7 +89,7 @@ class LessonRegistrationManager:
                 raise ex
             self.__register()
         except (LessonNotFoundException, LessonNotOpenForRegistrationException, LessonTimeDoesNotExistException,
-                MultipleDevicesConnectionException, NoAvailableSeatsException, NoMatchingSubscriptionException,
+                MultipleDevicesConnectionException, NoAvailableSeatsException, NoMatchingSubscriptionException,LessonCanceledException,
                 RegistrationForThisLessonAlreadyExistsException, RegistrationTimeoutException, UserPreferredSeatsOccupiedException) as ex:
             self.logger.error(ex)
         except Exception as ex:
@@ -152,7 +153,7 @@ class LessonRegistrationManager:
             available_seats = self.__extract_available_seats(response=self.api.get_available_seats(params=self.lesson))
         raise Exception('Failed to register for the lesson.')
 
-    def __wait_until_registration_starts(self, seat: int, timeout: int = 1) -> None:
+    def __wait_until_registration_starts(self, seat: int, timeout: int = 5) -> None:
         """
         Waits until the lesson registration begins.
         :param seat: int: The seat number to register with.
@@ -168,7 +169,7 @@ class LessonRegistrationManager:
                 return
             except LessonNotOpenForRegistrationException as ex:
                 self.logger.warning(ex)
-            except (LessonTimeDoesNotExistException, RegistrationForThisLessonAlreadyExistsException, NoMatchingSubscriptionException):
+            except (LessonTimeDoesNotExistException, RegistrationForThisLessonAlreadyExistsException, NoMatchingSubscriptionException, LessonCanceledException):
                 raise
             except Exception as ex:
                 self.logger.error(ex)

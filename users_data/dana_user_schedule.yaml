@@ -1,8 +1,41 @@
 club_id: 205
-user: '0527206014'
-password: 'dana1234'
+credentials:
+  password: dana1234
+  user: '0527206014'
 user_schedule:
-  - lesson_id: '10126'
-    seats: 8 33 32
-  - lesson_id: '10130'
-    seats: 30 31 32
+- in_progress: false
+  lesson_id: '10015'
+  seats: 8 33 32
+- in_progress: false
+  lesson_id: '10160'
+  seats: 5 8 6
+- in_progress: false
+  lesson_id: '10127'
+  seats: 5 8 6
+- in_progress: false
+  lesson_id: '10130'
+  seats: 5 8 6
+- in_progress: false
+  lesson_id: '10126'
+  seats: 5 8 6
+- in_progress: false
+  lesson_id: '10173'
+  seats: 3 2 1
+- in_progress: false
+  lesson_id: '10152'
+  seats: 3 2 1
+- in_progress: false
+  lesson_id: '10223'
+  seats: 3 2 1
+- in_progress: false
+  lesson_id: '10338'
+  seats: 3 2 1
+- in_progress: false
+  lesson_id: '10006'
+  seats: 5 8 6
+- in_progress: false
+  lesson_id: '10100'
+  seats: 3 2 1
+- in_progress: false
+  lesson_id: '10113'
+  seats: 3 2 1

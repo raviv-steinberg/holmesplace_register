@@ -4,8 +4,8 @@ Date: 06/09/2023
 """
 import time
 from datetime import datetime, timedelta
+from src.services.user_data_service import UserDataService
 from src.utils.lessons_manager import LessonsManager
-from src.utils.yaml_reader import YAMLReader
 
 
 class UserLessonSchedulerService:
@@ -16,24 +16,13 @@ class UserLessonSchedulerService:
     """
     WEEKDAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
 
-    def __init__(self, source_user_data_file: str):
+    def __init__(self, user_data_service: UserDataService):
         """
         Initializes the UserLessonScheduler class.
-        :param source_user_data_file: str: Path to the YAML file containing user's lesson schedule.
+        :param user_data_service: user data.
         """
-        self.secure_user_data_file = source_user_data_file
-        self.choices = None
-        self.club_id = None
+        self.user_data_service = user_data_service
         self.lessons_manager = LessonsManager()
-
-    def __read_user_choices(self) -> None:
-        """
-        Private method to fetch user's club_id & lesson choices from the provided YAML file.
-        :return: None.
-        """
-        data = YAMLReader.get_content(filepath=self.secure_user_data_file)
-        self.choices = data['user_schedule']
-        self.club_id = data['club_id']
 
     @staticmethod
     def __format_minutes_to_seconds(minutes_float: float) -> int:
@@ -49,20 +38,19 @@ class UserLessonSchedulerService:
         Fetches upcoming lessons based on the user's choices and calculates time until the registration for each lesson.
         :return: List of tuples where each tuple consists of a lesson ID and the time in minutes until its registration.
         """
-        self.__read_user_choices()
-        all_lessons = self.lessons_manager.get_all(club_id=self.club_id)
+        all_lessons = self.lessons_manager.get_all(club_id=self.user_data_service.club_id)
 
         upcoming_lessons = []
 
-        for user_choice in self.choices:
+        for user_choice in self.user_data_service.choices:
             lesson_id = user_choice['lesson_id']
 
             for category, lessons in all_lessons.items():
                 for lesson in lessons:
-                    if lesson["lesson_id"] == lesson_id:
-                        reg_day = lesson["registration_day"]
-                        reg_time = datetime.strptime(lesson["registration_start_time"], "%H:%M").time()
-                        time_until_reg = self.__calculate_time_until(reg_day, reg_time)
+                    if lesson['lesson_id'] == lesson_id:
+                        reg_day = lesson['registration_day']
+                        reg_time = datetime.strptime(lesson['registration_start_time'], '%H:%M').time()
+                        time_until_reg = self.__calculate_time_until(registration_day=reg_day, registration_time=reg_time)
                         upcoming_lessons.append((lesson_id, time_until_reg))
                         break
         return upcoming_lessons
@@ -70,8 +58,8 @@ class UserLessonSchedulerService:
     def monitor_registration_time(self, threshold_minutes: int = 3) -> tuple:
         """
         Continuously monitors the closest lesson registration time.
-        Whenever a lesson's registration time is found to be a specific number of minutes away (default 3 minutes),
-        it returns that lesson's ID.
+        Whenever a lesson's registration time is found to be a specific number
+         of minutes away (default 3 minutes), it returns that lesson's ID.
         :param threshold_minutes: The number of minutes away from registration to trigger an alert and return the lesson ID.
         :return: A tuple containing the lesson's ID and the time remaining until registration (in minutes).
         Returns (None, None) if no lesson meets the criteria.

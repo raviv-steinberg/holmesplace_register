@@ -8,6 +8,7 @@ from typing import Any, Optional, Union, Dict, List
 from http import HTTPStatus
 import requests
 from src.exceptions.bike_occupied_exception import BikeOccupiedException
+from src.exceptions.lesson_canceled_exception import LessonCanceledException
 from src.exceptions.lesson_not_open_for_registration import LessonNotOpenForRegistrationException
 from src.exceptions.lesson_time_does_not_exist import LessonTimeDoesNotExistException
 from src.exceptions.no_matching_subscription import NoMatchingSubscriptionException
@@ -36,6 +37,7 @@ class ApiHandler:
 
     NO_MATCHING_SUBSCRIPTION_FOUND_ERROR_CODE = '26'
     LESSON_TIME_DOES_NOT_EXIST_ERROR_CODE = '30'
+    LESSON_CANCELED_ERROR_CODE = '31'
     REGISTRATION_FOR_THIS_LESSON_ALREADY_EXISTS_ERROR_CODE = '32'
     BIKE_TAKEN_ERROR_CODE = '33'
     LESSON_IS_NOT_OPEN_FOR_REGISTRATION_ERROR_CODE = '50'
@@ -67,6 +69,8 @@ class ApiHandler:
         "No Matching Subscription Found" error code.
         :raises LessonTimeDoesNotExistException: If the error in the response matches the
         "Lesson Time Does Not Exist" error code.
+        :raises LessonCanceledException: If the error in the response matches the
+        "Lesson Canceled" error code.
         :raises RegistrationForThisLessonAlreadyExistsException: If the error in the response matches the
         "Registration For This Lesson Already Exists" error code.
         :raises BikeOccupiedException: If the error in the response matches the "Bike Taken" error code.
@@ -87,6 +91,8 @@ class ApiHandler:
                     raise NoMatchingSubscriptionException()
                 elif ApiHandler.LESSON_TIME_DOES_NOT_EXIST_ERROR_CODE in error:
                     raise LessonTimeDoesNotExistException()
+                elif ApiHandler.LESSON_CANCELED_ERROR_CODE in error:
+                    raise LessonCanceledException()
                 elif ApiHandler.REGISTRATION_FOR_THIS_LESSON_ALREADY_EXISTS_ERROR_CODE in error:
                     raise RegistrationForThisLessonAlreadyExistsException()
                 elif ApiHandler.BIKE_TAKEN_ERROR_CODE in error:

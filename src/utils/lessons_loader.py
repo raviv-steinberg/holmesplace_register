@@ -5,7 +5,7 @@ Date: 06/09/2023
 import os
 from src.utils.project import Project
 from src.utils.singleton_meta import SingletonMeta
-from src.utils.yaml_reader import YAMLReader
+from src.utils.yaml_handler import YAMLHandler
 
 
 class LessonsLoader(metaclass=SingletonMeta):
@@ -34,4 +34,4 @@ class LessonsLoader(metaclass=SingletonMeta):
         :return: dict: A dictionary containing lessons data.
         Note: This is a private method and should not be used directly outside the class.
         """
-        return YAMLReader.get_content(filepath=self.lessons_file_path)
+        return YAMLHandler.get_content(filepath=self.lessons_file_path)

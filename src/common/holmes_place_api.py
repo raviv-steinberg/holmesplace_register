@@ -3,10 +3,9 @@ Author: raviv steinberg
 Date: 04/09/2023
 """
 import logging
-
 from requests import Response
 from src.api.api_handler import ApiHandler
-from src.utils.yaml_reader import YAMLReader
+from src.utils.yaml_handler import YAMLHandler
 
 
 class HolmesPlaceAPI:
@@ -25,7 +24,7 @@ class HolmesPlaceAPI:
         """
         Initialize the API handler by reading configurations from the 'config.yaml'.
         """
-        self.config = YAMLReader.get_content(filepath='config.yaml')
+        self.config = YAMLHandler.get_content(filepath='config.yaml')
         self.base_url = self.config['base_url']
 
     def login(self, user: str, password: str) -> Response:

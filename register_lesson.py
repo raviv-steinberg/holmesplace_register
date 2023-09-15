@@ -3,6 +3,7 @@ Author: raviv steinberg
 Date: 09/09/2023
 """
 import argparse
+from src.services.user_data_service import UserDataService
 from src.utils.lesson_registration_manager_factory import LessonRegistrationManagerFactory
 
 if __name__ == "__main__":
@@ -27,11 +28,11 @@ if __name__ == "__main__":
     parser.add_argument('--user_data_file', '-f', type=str, required=True, help='User YAML data file')
     args = parser.parse_args()
 
-    lesson_registration_manager = LessonRegistrationManagerFactory(source_user_data_file=args.user_data_file, lesson_id=args.lesson_id).get()
+    lesson_id = args.lesson_id
+    user_data_service = UserDataService(filepath=args.user_data_file)
+    lesson_registration_manager = LessonRegistrationManagerFactory(user_data_service=user_data_service, lesson_id=lesson_id).get()
     try:
+        user_data_service.set_registration_progress(lesson_id=lesson_id, in_progress=True)
         lesson_registration_manager.register_lesson()
-    except Exception as ex:
-        raise
-        # logger.exception(ex)
     finally:
-        lesson_registration_manager.logout()
+        user_data_service.set_registration_progress(lesson_id=lesson_id, in_progress=False)
