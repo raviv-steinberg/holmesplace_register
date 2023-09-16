@@ -28,11 +28,4 @@ if __name__ == "__main__":
     parser.add_argument('--user_data_file', '-f', type=str, required=True, help='User YAML data file')
     args = parser.parse_args()
 
-    lesson_id = args.lesson_id
-    user_data_service = UserDataService(filepath=args.user_data_file)
-    lesson_registration_manager = LessonRegistrationManagerFactory(user_data_service=user_data_service, lesson_id=lesson_id).get()
-    try:
-        user_data_service.set_registration_progress(lesson_id=lesson_id, in_progress=True)
-        lesson_registration_manager.register_lesson()
-    finally:
-        user_data_service.set_registration_progress(lesson_id=lesson_id, in_progress=False)
+    LessonRegistrationManagerFactory(user_data_service=UserDataService(filepath=args.user_data_file), lesson_id=args.lesson_id).get().register_lesson()

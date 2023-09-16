@@ -19,33 +19,60 @@ from src.exceptions.no_matching_subscription import NoMatchingSubscriptionExcept
 from src.exceptions.registration_for_this_lesson_already_exists import RegistrationForThisLessonAlreadyExistsException
 from src.exceptions.registration_timeout_exception import RegistrationTimeoutException
 from src.exceptions.user_preferred_seats_occupied_exception import UserPreferredSeatsOccupiedException
+from src.services.user_data_service import UserDataService
 from src.utils.date_utils import DateUtils
 from src.utils.logger_manager import LoggerManager
 
 
 class LessonRegistrationManager:
-    def __init__(self, user: str, password: str, api: HolmesPlaceAPI, lesson: dict, seats: list[int]):
+    """
+    The LessonRegistrationManager manages the process of registering a user for a specific lesson.
+    The manager interacts with the HolmesPlaceAPI to log in, retrieve available seats, and perform registration.
+    It prioritizes user-preferred seats, but if they are occupied, it attempts to register the user on a random seat.
+    """
+
+    def __init__(self, user_data_service: UserDataService, api: HolmesPlaceAPI, lesson: dict, seats: list[int]):
         """
         Initializes the LessonRegistrationManager instance.
-        :param user: str: The username used for API interactions.
-        :param password: str: The password corresponding to the provided username.
+        :param user_data_service: user data.
         :param api: HolmesPlaceAPI: An instance of the HolmesPlaceAPI to interact with the API endpoints.
         :param lesson: dict: Details of the lesson to be registered.
         :param seats: list[int]: Priority list of seat numbers the user wants to register with.
         """
-        self.user = user
-        self.password = password
+        self.__validate_input(lesson=lesson, seats=seats)
+        self.user_data_service = user_data_service
         self.lesson = lesson
         self.api = api
         self._is_logged_in = False
         self.seats = seats
         self.__initialize_logger_manager()
 
+    def __repr__(self):
+        return f'Start the registration process for the \'{self.lesson["type"]}\' lesson for user \'{self.user_data_service.user}\'' \
+               f' on {self.lesson["day"].upper()}, {self.lesson["date"]} at {self.lesson["registration_start_time"]}'
+
+    @staticmethod
+    def __validate_input(lesson: dict, seats: list[int]) -> None:
+        """
+        Validates the input parameters for the LessonRegistrationManager.
+        This function checks:
+        - if the `lesson` dictionary is not empty or None.
+        - if the `seats` list is not empty or None.
+        :param lesson: dict: Details of the lesson to be registered.
+        :param seats: list[int]: Priority list of seat numbers the user wants to register with.
+        :raises ValueError: If any of the input parameters are invalid.
+        """
+        if not lesson:
+            raise ValueError('[LessonRegistrationManager] - Invalid lesson.')
+        if not seats:
+            raise ValueError('[LessonRegistrationManager] - Invalid seats.')
+
     def register_lesson(self) -> None:
         """
         Registers the user for the specified lesson by either priority or random seat choice.
         :return: None
         """
+        self.logger.info(self)
         self.__do_work()
 
     def login(self):
@@ -54,12 +81,12 @@ class LessonRegistrationManager:
         :return: None
         """
         try:
-            self.logger.debug(f'Attempting login for user: {self.user}.')
-            self.api.login(user=self.user, password=self.password)
-            self.logger.info(f'Successfully logged in as {self.user}.')
+            self.logger.debug(f'Attempting login for user: {self.user_data_service.user}.')
+            self.api.login(user=self.user_data_service.user, password=self.user_data_service.password)
+            self.logger.info(f'Successfully logged in as {self.user_data_service.user}.')
             self._is_logged_in = True
         except Exception as ex:
-            self.__check_exception_message(error_msg=str(ex))
+            LessonRegistrationManager.__check_exception_message(error_msg=str(ex))
             raise
 
     def logout(self):
@@ -71,33 +98,74 @@ class LessonRegistrationManager:
             time.sleep(2)
             self.api.logout()
             self._is_logged_in = False
-            self.logger.info(f'User \'{self.user}\' successfully logged out.')
+            self.logger.info(f'User \'{self.user_data_service.user}\' successfully logged out.')
 
     def __do_work(self):
+        """
+        Handles the process of user registration for a lesson. This includes:
+        - Logging in.
+        - Setting the registration progress.
+        - Waiting until the specified registration start time.
+        - Checking for seat availability.
+        - Registering for the lesson.
+        Exceptions related to lessons and registration are logged for troubleshooting. After the process, the user is logged out.
+        :return: None
+            """
         try:
-            self.login()
-            self.__wait_n_seconds_before_registration_start(seconds_before=60)
-            self.logger.info(f'lesson details: {self.lesson}')
-            self.logger.info(msg=f'User\'s preferred seats: {self.seats}')
-            seat = self.__get_first_priority_seat()
-            try:
-                self.__wait_until_registration_starts(seat=seat)
-                return
-            except BikeOccupiedException:
-                self.logger.warning(msg=f'Preferred seat {seat} is occupied.')
-            except Exception as ex:
-                raise ex
+            self.__handle_registration_process()
+            self.__wait_before_registration_start()
             self.__register()
         except (LessonNotFoundException, LessonNotOpenForRegistrationException, LessonTimeDoesNotExistException,
-                MultipleDevicesConnectionException, NoAvailableSeatsException, NoMatchingSubscriptionException,LessonCanceledException,
+                MultipleDevicesConnectionException, NoAvailableSeatsException, NoMatchingSubscriptionException, LessonCanceledException,
                 RegistrationForThisLessonAlreadyExistsException, RegistrationTimeoutException, UserPreferredSeatsOccupiedException) as ex:
             self.logger.error(ex)
         except Exception as ex:
             self.logger.exception(ex)
         finally:
+            self.user_data_service.set_registration_progress(lesson_id=self.lesson['lesson_id'], in_progress=False)
             self.logout()
 
-    def __wait_n_seconds_before_registration_start(self, seconds_before: int) -> None:
+    def __handle_registration_process(self):
+        """
+        Prepares and initiates the registration process.
+        This function:
+        1. Logs into the system.
+        2. Sets the registration progress for the given lesson.
+        3. Waits until a specified time before registration starts.
+        4. Logs lesson details and user's preferred seats.
+        :return: None
+        """
+        self.login()
+        self.user_data_service.set_registration_progress(lesson_id=self.lesson['lesson_id'], in_progress=True)
+        self.__wait_n_seconds_before_registration_start()
+        self.logger.info(f'lesson details: {self.lesson}')
+        self.logger.info(msg=f'User\'s preferred seats: {self.seats}')
+
+    def __wait_before_registration_start(self):
+        """
+            Waits until the registration process starts.
+            This function checks the availability of the first priority seat for the user.
+            It waits until the registration starts. If the first priority seat is occupied
+            or any other exception occurs, it logs a warning or raises the exception, respectively.
+            :return: None
+            :raises BikeOccupiedException: If the preferred seat is occupied.
+            :raises Exception: For any other unexpected issues.
+            """
+        seat = self.__get_first_priority_seat()
+        try:
+            self.__wait_until_registration_starts(seat=seat)
+            return
+        except BikeOccupiedException:
+            self.logger.warning(msg=f'Preferred seat {seat} is occupied.')
+        except Exception:
+            raise
+
+    def __wait_n_seconds_before_registration_start(self, seconds_before: int = 30) -> None:
+        """
+        Waits for a specified number of seconds before the lesson's registration start time.
+        :param seconds_before: The number of seconds to wait before the lesson's registration starts. Default is 30 seconds.
+        :return: None
+        """
         self.logger.debug(msg=f'\'{self.lesson["type"]}\' registration start time: {self.lesson["registration_start_time"]}.')
         target = DateUtils.get_target_time(time=self.lesson['registration_start_time'], seconds_before=seconds_before)
         self.logger.debug(msg=f'Pausing until {target} ({seconds_before} seconds before registration starts).')
@@ -133,7 +201,7 @@ class LessonRegistrationManager:
 
     def __initialize_logger_manager(self):
         # Initialize the LoggerManager for this instance
-        logger_manager = LoggerManager(user=self.user)
+        logger_manager = LoggerManager(user=self.user_data_service.user)
         self.logger = logger_manager.logger
 
     def __register_by_random(self) -> None:
@@ -220,7 +288,8 @@ class LessonRegistrationManager:
         if not self.seats:
             raise UserPreferredSeatsOccupiedException
 
-    def __check_exception_message(self, error_msg: str) -> None:
+    @staticmethod
+    def __check_exception_message(error_msg: str) -> None:
         """
         Checks a given error message for specific conditions and raises exceptions accordingly.
         :param error_msg: str: The error message to be checked.

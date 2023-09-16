@@ -24,17 +24,17 @@ clubs:
         instructor_id: '27'
       - day: tuesday
         type: pilates
+        start_time: '7:30'
+        registration_day: monday
+        registration_start_time: '7:30'
+        lesson_id: '10038'
+        instructor_id: '27'
+      - day: tuesday
+        type: pilates
         start_time: '16:15'
         registration_day: tuesday
         registration_start_time: '14:15'
         lesson_id: '10044'
-        instructor_id: '27'
-      - day: tuesday
-        type: pilates
-        start_time: '17:15'
-        registration_day: tuesday
-        registration_start_time: '15:15'
-        lesson_id: '10081'
         instructor_id: '27'
       - day: thursday
         type: pilates
@@ -157,6 +157,20 @@ clubs:
         lesson_id: '10126'
         instructor_id: '27'
     yoga:
+      - day: monday
+        type: yoga
+        start_time: '10:30'
+        registration_day: sunday
+        registration_start_time: '10:30'
+        lesson_id: '10024'
+        instructor_id: '50'
+      - day: tuesday
+        type: yoga
+        start_time: '8:30'
+        registration_day: monday
+        registration_start_time: '8:30'
+        lesson_id: '10051'
+        instructor_id: '50'
       - day: wednesday
         type: yoga
         start_time: '8:30'
@@ -201,6 +215,34 @@ clubs:
         lesson_id: '10100'
         instructor_id: '27'
     health_exercise:
+      - day: monday
+        type: health_exercise
+        start_time: '10:45'
+        registration_day: sunday
+        registration_start_time: '10:45'
+        lesson_id: '10169'
+        instructor_id: '50'
+      - day: tuesday
+        type: health_exercise
+        start_time: '10:00'
+        registration_day: monday
+        registration_start_time: '10:00'
+        lesson_id: '10014'
+        instructor_id: '50'
+      - day: tuesday
+        type: health_exercise
+        start_time: '11:00'
+        registration_day: monday
+        registration_start_time: '11:00'
+        lesson_id: '10342'
+        instructor_id: '50'
+      - day: tuesday
+        type: pilates
+        start_time: '17:15'
+        registration_day: tuesday
+        registration_start_time: '15:15'
+        lesson_id: '10081'
+        instructor_id: '27'
       - day: saturday
         type: health_exercise
         start_time: '10:30'
@@ -209,6 +251,20 @@ clubs:
         lesson_id: '10113'
         instructor_id: '27'
     feldenkrais:
+      - day: thursday
+        type: feldenkrais
+        start_time: '12:00'
+        registration_day: monday
+        registration_start_time: '12:00'
+        lesson_id: '10018'
+        instructor_id: '27'
+      - day: tuesday
+        type: feldenkrais
+        start_time: '17:15'
+        registration_day: monday
+        registration_start_time: '17:15'
+        lesson_id: '10019'
+        instructor_id: '27'
       - day: thursday
         type: feldenkrais
         start_time: '17:15'
@@ -224,3 +280,11 @@ clubs:
         registration_start_time: '17:15'
         lesson_id: '10047'
         instructor_id: '27'
+    dynamic_design:
+         - day: tuesday
+           type: dynamic_design
+           start_time: '8:30'
+           registration_day: monday
+           registration_start_time: '8:30'
+           lesson_id: '10054'
+           instructor_id: '50'

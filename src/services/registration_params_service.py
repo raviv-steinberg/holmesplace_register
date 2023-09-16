@@ -41,4 +41,5 @@ class RegistrationParamsService:
         params['start_time'] = DateUtils.format_time(time=lesson['start_time'])
         params['instructor_id'] = lesson['instructor_id']
         params['registration_start_time'] = lesson['registration_start_time']
+        params['day'] = lesson['registration_day']
         return params
