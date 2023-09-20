@@ -2,6 +2,8 @@
 Author: raviv steinberg
 Date: 09/09/2023
 """
+import time
+
 from src.services.user_data_service import UserDataService
 from src.utils.lessons_manager import LessonsManager
 import json

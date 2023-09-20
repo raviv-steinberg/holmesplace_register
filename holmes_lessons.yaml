@@ -178,6 +178,20 @@ clubs:
         registration_start_time: '8:30'
         lesson_id: '10025'
         instructor_id: '50'
+      - day: wednesday
+        type: yoga
+        start_time: '17:55'
+        registration_day: wednesday
+        registration_start_time: '15:55'
+        lesson_id: '10048'
+        instructor_id: '50'
+      - day: thursday
+        type: yoga
+        start_time: '8:30'
+        registration_day: wednesday
+        registration_start_time: '8:30'
+        lesson_id: '10049'
+        instructor_id: '50'
       - day: saturday
         type: yoga
         start_time: '9:15'
@@ -192,13 +206,6 @@ clubs:
         registration_day: sunday
         registration_start_time: '7:30'
         lesson_id: '10161'
-        instructor_id: '351'
-      - day: thursday
-        type: shape
-        start_time: '8:30'
-        registration_day: wednesday
-        registration_start_time: '8:30'
-        lesson_id: '10179'
         instructor_id: '351'
       - day: thursday
         type: shape
@@ -265,6 +272,13 @@ clubs:
         registration_start_time: '17:15'
         lesson_id: '10019'
         instructor_id: '27'
+      -  day: thursday
+         type: feldenkrais
+         start_time: '11:30'
+         registration_day: wednesday
+         registration_start_time: '11:30'
+         lesson_id: '10167'
+         instructor_id: '27'
       - day: thursday
         type: feldenkrais
         start_time: '17:15'
@@ -287,4 +301,11 @@ clubs:
            registration_day: monday
            registration_start_time: '8:30'
            lesson_id: '10054'
+           instructor_id: '50'
+         - day: thursday
+           type: dynamic_design
+           start_time: '8:30'
+           registration_day: wednesday
+           registration_start_time: '8:30'
+           lesson_id: '10179'
            instructor_id: '50'

@@ -6,7 +6,8 @@ import json
 import random
 import time
 import pause
-from requests import Response
+import requests
+
 from src.common.holmes_place_api import HolmesPlaceAPI
 from src.exceptions.bike_occupied_exception import BikeOccupiedException
 from src.exceptions.lesson_canceled_exception import LessonCanceledException
@@ -19,6 +20,7 @@ from src.exceptions.no_matching_subscription import NoMatchingSubscriptionExcept
 from src.exceptions.registration_for_this_lesson_already_exists import RegistrationForThisLessonAlreadyExistsException
 from src.exceptions.registration_timeout_exception import RegistrationTimeoutException
 from src.exceptions.user_preferred_seats_occupied_exception import UserPreferredSeatsOccupiedException
+from src.interfaces.inotification import INotification
 from src.services.user_data_service import UserDataService
 from src.utils.date_utils import DateUtils
 from src.utils.logger_manager import LoggerManager
@@ -31,13 +33,15 @@ class LessonRegistrationManager:
     It prioritizes user-preferred seats, but if they are occupied, it attempts to register the user on a random seat.
     """
 
-    def __init__(self, user_data_service: UserDataService, api: HolmesPlaceAPI, lesson: dict, seats: list[int]):
+    def __init__(self, user_data_service: UserDataService, api: HolmesPlaceAPI, lesson: dict, seats: list[int], notifier: INotification = None):
         """
         Initializes the LessonRegistrationManager instance.
         :param user_data_service: user data.
         :param api: HolmesPlaceAPI: An instance of the HolmesPlaceAPI to interact with the API endpoints.
         :param lesson: dict: Details of the lesson to be registered.
         :param seats: list[int]: Priority list of seat numbers the user wants to register with.
+        :param notifier: An instance of a class that implements the INotification interface.
+        This is used to send notifications regarding the registration process.
         """
         self.__validate_input(lesson=lesson, seats=seats)
         self.user_data_service = user_data_service
@@ -46,6 +50,7 @@ class LessonRegistrationManager:
         self._is_logged_in = False
         self.seats = seats
         self.__initialize_logger_manager()
+        self.notifier = notifier
 
     def __repr__(self):
         return f'Start the registration process for the \'{self.lesson["type"]}\' lesson for user \'{self.user_data_service.user}\'' \
@@ -110,10 +115,11 @@ class LessonRegistrationManager:
         - Registering for the lesson.
         Exceptions related to lessons and registration are logged for troubleshooting. After the process, the user is logged out.
         :return: None
-            """
+        """
         try:
             self.__handle_registration_process()
-            self.__wait_before_registration_start()
+            if self.__wait_before_registration_start():
+                return
             self.__register()
         except (LessonNotFoundException, LessonNotOpenForRegistrationException, LessonTimeDoesNotExistException,
                 MultipleDevicesConnectionException, NoAvailableSeatsException, NoMatchingSubscriptionException, LessonCanceledException,
@@ -141,20 +147,20 @@ class LessonRegistrationManager:
         self.logger.info(f'lesson details: {self.lesson}')
         self.logger.info(msg=f'User\'s preferred seats: {self.seats}')
 
-    def __wait_before_registration_start(self):
+    def __wait_before_registration_start(self) -> bool:
         """
             Waits until the registration process starts.
             This function checks the availability of the first priority seat for the user.
             It waits until the registration starts. If the first priority seat is occupied
             or any other exception occurs, it logs a warning or raises the exception, respectively.
-            :return: None
+            :return: True is the registration succeed, False otherwise.
             :raises BikeOccupiedException: If the preferred seat is occupied.
             :raises Exception: For any other unexpected issues.
             """
         seat = self.__get_first_priority_seat()
         try:
             self.__wait_until_registration_starts(seat=seat)
-            return
+            return True
         except BikeOccupiedException:
             self.logger.warning(msg=f'Preferred seat {seat} is occupied.')
         except Exception:
@@ -189,7 +195,7 @@ class LessonRegistrationManager:
         Get the first available priority seat for the user.
         :return: int: The seat number.
         """
-        available_seats = self.__extract_available_seats(response=self.api.get_available_seats(params=self.lesson))
+        available_seats = self.__extract_available_seats()
         try:
             self.__filter_priority_seats(available_seats=available_seats)
             seat = self.seats.pop(0)
@@ -210,7 +216,7 @@ class LessonRegistrationManager:
         :return: None
         """
         self.logger.debug('Priority seats occupied, attempting random seat registration.')
-        available_seats = self.__extract_available_seats(response=self.api.get_available_seats(params=self.lesson))
+        available_seats = self.__extract_available_seats()
         self.logger.info('Selecting a random seat...')
 
         while len(available_seats) > 0:
@@ -218,7 +224,7 @@ class LessonRegistrationManager:
             self.logger.debug(f'Attempting registration with seat number: {seat}.')
             if self.__try_to_register_lesson(seat=seat):
                 return
-            available_seats = self.__extract_available_seats(response=self.api.get_available_seats(params=self.lesson))
+            available_seats = self.__extract_available_seats()
         raise Exception('Failed to register for the lesson.')
 
     def __wait_until_registration_starts(self, seat: int, timeout: int = 5) -> None:
@@ -239,6 +245,9 @@ class LessonRegistrationManager:
                 self.logger.warning(ex)
             except (LessonTimeDoesNotExistException, RegistrationForThisLessonAlreadyExistsException, NoMatchingSubscriptionException, LessonCanceledException):
                 raise
+            except requests.exceptions.HTTPError as ex:
+                self.logger.error(ex)
+                time.sleep(1)
             except Exception as ex:
                 self.logger.error(ex)
         raise RegistrationTimeoutException(f'Failed to register for lesson \'{self.lesson["type"]}\'  within {timeout} minute(s).')
@@ -258,21 +267,31 @@ class LessonRegistrationManager:
         except Exception:
             raise
 
-    def __extract_available_seats(self, response: Response) -> list[int]:
+    def __extract_available_seats(self, retries: int = 5, delay: int = 1) -> list[int]:
         """
         Extracts available seat numbers from the given API response.
-        :param response: Response: The API response to extract seat numbers from.
+        :param retries: int: Number of retries in case of failure. Default is 3.
+        :param delay: int: Delay between retries in seconds. Default is 1 second.
         :return: list[int]: A list of available seat numbers.
         """
-        data = response.json()
-        if data.get("success"):
-            available_seats = [int(seat) for seat in json.loads(data.get("availableSeats", "[]"))]
-            if not available_seats:
-                self.logger.error("No available seats retrieved from the response.")
+        self.logger.debug(msg=f'Extract available seats for \'{self.lesson["type"]}\' lesson')
+        for attempt in range(retries):
+            self.logger.debug(msg=f'Attempt {attempt+1} of {retries}')
+            try:
+                response = self.api.get_available_seats(params=self.lesson)
+                data = response.json()
+                if data.get("success"):
+                    available_seats = [int(seat) for seat in json.loads(data.get("availableSeats", "[]"))]
+                    if not available_seats:
+                        self.logger.error("No available seats retrieved from the response.")
+                        raise NoAvailableSeatsException
+                    self.logger.info(f'Available seats: {available_seats}.')
+                    return available_seats
                 raise NoAvailableSeatsException
-            self.logger.info(f'Available seats: {available_seats}.')
-            return available_seats
-        raise NoAvailableSeatsException
+            except Exception as ex:
+                self.logger.error(msg=ex)
+                self.logger.debug(msg=f'Sleep {delay} second and retry...')
+                time.sleep(delay)
 
     def __filter_priority_seats(self, available_seats: list[int]) -> None:
         """

@@ -1,0 +1,11 @@
+club_id: 205
+credentials:
+  password: '12345678'
+  user: '0547713437'
+user_schedule:
+- in_progress: false
+  lesson_id: '10127'
+  seats: 4
+- in_progress: false
+  lesson_id: '10130'
+  seats: 4

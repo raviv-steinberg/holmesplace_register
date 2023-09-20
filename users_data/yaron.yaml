@@ -44,7 +44,7 @@ user_schedule:
   seats: 6 8 3
 - in_progress: false
   lesson_id: '10044'
-  seats: 6 8 3
+  seats: 4
 - in_progress: false
   lesson_id: '10081'
   seats: 6 8 3

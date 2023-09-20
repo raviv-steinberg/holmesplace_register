@@ -37,6 +37,7 @@ class LoggerManager(metaclass=SingletonMeta):
                     'filename': self.__create_directory_structure(),
                     'backupCount': 3,
                     'formatter': 'simple',
+                    'encoding': 'utf-8'
                 },
                 "stdout_handler": {
                     "class": "logging.StreamHandler",

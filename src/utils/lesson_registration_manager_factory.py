@@ -48,6 +48,10 @@ class LessonRegistrationManagerFactory:
         """
         for lesson in self.user_data_service.choices:
             if lesson['lesson_id'] == self.lesson_id:
-                return [int(seat) for seat in lesson['seats'].split()]
+                seats = lesson['seats']
+                if isinstance(seats, str):
+                    return [int(seat) for seat in seats.split()]
+                elif isinstance(seats, int):
+                    return [seats]
         return []
 
