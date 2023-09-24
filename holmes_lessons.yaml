@@ -309,3 +309,10 @@ clubs:
            registration_start_time: '8:30'
            lesson_id: '10179'
            instructor_id: '50'
+         - day: sunday
+           type: dynamic_design
+           start_time: '9:30'
+           registration_day: friday
+           registration_start_time: '9:30'
+           lesson_id: '10022'
+           instructor_id: '50'

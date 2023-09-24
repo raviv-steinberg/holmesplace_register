@@ -5,9 +5,9 @@ Date: 04/09/2023
 import json
 import random
 import time
+from datetime import datetime
 import pause
 import requests
-
 from src.common.holmes_place_api import HolmesPlaceAPI
 from src.exceptions.bike_occupied_exception import BikeOccupiedException
 from src.exceptions.lesson_canceled_exception import LessonCanceledException
@@ -21,6 +21,10 @@ from src.exceptions.registration_for_this_lesson_already_exists import Registrat
 from src.exceptions.registration_timeout_exception import RegistrationTimeoutException
 from src.exceptions.user_preferred_seats_occupied_exception import UserPreferredSeatsOccupiedException
 from src.interfaces.inotification import INotification
+from src.services.email.email_preparer_service import EmailPreparerService
+from src.services.google.google_calendar import GoogleCalendar
+from src.services.google.google_gmail import GoogleGmail
+from src.services.smtp_service import SMTPService
 from src.services.user_data_service import UserDataService
 from src.utils.date_utils import DateUtils
 from src.utils.logger_manager import LoggerManager
@@ -54,7 +58,7 @@ class LessonRegistrationManager:
 
     def __repr__(self):
         return f'Start the registration process for the \'{self.lesson["type"]}\' lesson for user \'{self.user_data_service.user}\'' \
-               f' on {self.lesson["day"].upper()}, {self.lesson["date"]} at {self.lesson["registration_start_time"]}'
+               f' on {self.lesson["day"].upper()}, {self.lesson["date"]} at {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}'
 
     @staticmethod
     def __validate_input(lesson: dict, seats: list[int]) -> None:
@@ -105,6 +109,17 @@ class LessonRegistrationManager:
             self._is_logged_in = False
             self.logger.info(f'User \'{self.user_data_service.user}\' successfully logged out.')
 
+    def __send_remainder(self, seat: int):
+        subject, body = EmailPreparerService().prepare_email(attendee_name=self.user_data_service.name, lesson=self.lesson, seat=seat)
+        SMTPService().send_email(to=self.user_data_service.email, subject=subject, body=body)
+        # GoogleGmail().send_email(to_email=self.user_data_service.email, subject=subject, body=body)
+        GoogleCalendar().create_event(
+            start_time=datetime.strptime(f'{self.lesson["date"]} {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}', '%Y/%m/%d %H:%M'),
+            summary=f'{self.lesson["type"].upper()} at {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}, seat number {seat}',
+            description='',
+            duration=60,
+            attendees=[self.user_data_service.email])
+
     def __do_work(self):
         """
         Handles the process of user registration for a lesson. This includes:
@@ -118,9 +133,13 @@ class LessonRegistrationManager:
         """
         try:
             self.__handle_registration_process()
-            if self.__wait_before_registration_start():
+            seat = self.__wait_before_registration_start()
+            if seat:
+                self.__send_remainder(seat=seat)
                 return
-            self.__register()
+            seat = self.__register()
+            if seat:
+                self.__send_remainder(seat=seat)
         except (LessonNotFoundException, LessonNotOpenForRegistrationException, LessonTimeDoesNotExistException,
                 MultipleDevicesConnectionException, NoAvailableSeatsException, NoMatchingSubscriptionException, LessonCanceledException,
                 RegistrationForThisLessonAlreadyExistsException, RegistrationTimeoutException, UserPreferredSeatsOccupiedException) as ex:
@@ -147,20 +166,20 @@ class LessonRegistrationManager:
         self.logger.info(f'lesson details: {self.lesson}')
         self.logger.info(msg=f'User\'s preferred seats: {self.seats}')
 
-    def __wait_before_registration_start(self) -> bool:
+    def __wait_before_registration_start(self) -> int:
         """
             Waits until the registration process starts.
             This function checks the availability of the first priority seat for the user.
             It waits until the registration starts. If the first priority seat is occupied
             or any other exception occurs, it logs a warning or raises the exception, respectively.
-            :return: True is the registration succeed, False otherwise.
+            :return: Registered seat numer.
             :raises BikeOccupiedException: If the preferred seat is occupied.
             :raises Exception: For any other unexpected issues.
             """
         seat = self.__get_first_priority_seat()
         try:
             self.__wait_until_registration_starts(seat=seat)
-            return True
+            return seat
         except BikeOccupiedException:
             self.logger.warning(msg=f'Preferred seat {seat} is occupied.')
         except Exception:
@@ -178,17 +197,19 @@ class LessonRegistrationManager:
         pause.until(time=target)
         self.logger.debug(msg=f'Resumed execution. Current time: {DateUtils.current_time()}')
 
-    def __register(self) -> bool:
+    def __register(self) -> int:
         """
         Registers the user using their seat priority list.
-        :return: bool: True if registration is successful, otherwise False.
+        :return: Registered seat numer.
         """
         self.logger.debug('Attempting registration with other priority seats.')
         while len(self.seats) > 0:
             seat = self.seats.pop(0)
             if self.__try_to_register_lesson(seat=seat):
-                return True
-        self.__register_by_random()
+                return seat
+        seat = self.__register_by_random()
+        if seat:
+            return seat
 
     def __get_first_priority_seat(self) -> int:
         """
@@ -210,10 +231,10 @@ class LessonRegistrationManager:
         logger_manager = LoggerManager(user=self.user_data_service.user)
         self.logger = logger_manager.logger
 
-    def __register_by_random(self) -> None:
+    def __register_by_random(self) -> int:
         """
         Registers the user by choosing a random seat.
-        :return: None
+        :return: Registered seat numer.
         """
         self.logger.debug('Priority seats occupied, attempting random seat registration.')
         available_seats = self.__extract_available_seats()
@@ -223,7 +244,7 @@ class LessonRegistrationManager:
             seat = self.__choose_random_seat(available_seats=available_seats)
             self.logger.debug(f'Attempting registration with seat number: {seat}.')
             if self.__try_to_register_lesson(seat=seat):
-                return
+                return seat
             available_seats = self.__extract_available_seats()
         raise Exception('Failed to register for the lesson.')
 
@@ -276,7 +297,7 @@ class LessonRegistrationManager:
         """
         self.logger.debug(msg=f'Extract available seats for \'{self.lesson["type"]}\' lesson')
         for attempt in range(retries):
-            self.logger.debug(msg=f'Attempt {attempt+1} of {retries}')
+            self.logger.debug(msg=f'Attempt {attempt + 1} of {retries}')
             try:
                 response = self.api.get_available_seats(params=self.lesson)
                 data = response.json()
@@ -288,6 +309,8 @@ class LessonRegistrationManager:
                     self.logger.info(f'Available seats: {available_seats}.')
                     return available_seats
                 raise NoAvailableSeatsException
+            except NoAvailableSeatsException as ex:
+                raise
             except Exception as ex:
                 self.logger.error(msg=ex)
                 self.logger.debug(msg=f'Sleep {delay} second and retry...')

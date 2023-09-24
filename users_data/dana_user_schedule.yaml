@@ -2,6 +2,8 @@ club_id: 205
 credentials:
   password: dana1234
   user: '0527206014'
+name: 'dana'
+email: dana.kagan@gmail.com
 user_schedule:
 - in_progress: false
   lesson_id: '10015'

@@ -1,0 +1,10 @@
+club_id: 205
+credentials:
+  password: '12345678'
+  user: 0547558333
+name: 'raviv'
+email: raviv.steinberg@gmail.com
+user_schedule:
+- in_progress: false
+  lesson_id: '10152'
+  seats: 4 5

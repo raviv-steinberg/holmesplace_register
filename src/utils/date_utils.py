@@ -78,21 +78,14 @@ class DateUtils:
         return original_datetime - datetime.timedelta(seconds=seconds_before)
 
     @staticmethod
-    def _get_target_time(time: str, seconds_before: int) -> datetime.datetime:
+    def convert_time_format(time_str: str) -> str:
         """
-        Convert a time from "HHMMSS" format to a datetime object for the current day and subtracts the given seconds.
-        :param time: str: Time in "HHMMSS" format.
-        :param seconds_before: int: Number of seconds to subtract from the given time.
-        :return: datetime.datetime: Target datetime object after subtracting seconds.
+        Convert a time string from "HHMMSS" format to "HH:MM" format.
+        :param time_str: str: Time in "HHMMSS" format.
+        :return: str: Time in "HH:MM" format.
         """
-        h, m, s = int(time[:2]), int(time[2:4]), int(time[4:])
-        original_time = datetime.time(h, m, s)
+        return time_str[:2] + ":" + time_str[2:4]
 
-        now = datetime.datetime.now()
-        original_datetime = datetime.datetime.combine(now.date(), original_time)
-
-        # Subtract given seconds
-        return original_datetime - datetime.timedelta(seconds=seconds_before)
 
     @staticmethod
     def current_time() -> datetime.datetime:

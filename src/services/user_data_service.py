@@ -12,6 +12,7 @@ class UserDataService:
     and password), user choices/schedules, and provides utilities for handling lesson
     registration statuses.
     """
+
     def __init__(self, filepath: str):
         """
         Initializes the UserDataService with the specified filepath.
@@ -23,6 +24,8 @@ class UserDataService:
         self._club_id = content.get('club_id')
         self._user = content.get('credentials')['user']
         self._password = content.get('credentials')['password']
+        self._name = content.get('name')
+        self._email = content.get('email')
         self._choices = content.get('user_schedule', [])
 
     @property
@@ -75,6 +78,40 @@ class UserDataService:
         """
         self._password = value
         self._update_user_data('password', value)
+
+    @property
+    def name(self) -> str:
+        """
+        Gets the name from the user data.
+        :return: A string representing the name.
+        """
+        return self._name
+
+    @name.setter
+    def name(self, value: str):
+        """
+        Sets the name in the user data.
+        :param value: A string representing the name.
+        """
+        self._name = value
+        self._update_user_data('name', value)
+
+    @property
+    def email(self) -> str:
+        """
+        Gets the password from the user data.
+        :return: A string representing the password.
+        """
+        return self._email
+
+    @email.setter
+    def email(self, value: str):
+        """
+        Sets the password in the user data.
+        :param value: A string representing the password.
+        """
+        self._email = value
+        self._update_user_data('email', value)
 
     @property
     def choices(self) -> list:
