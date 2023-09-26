@@ -22,8 +22,8 @@ from src.exceptions.registration_timeout_exception import RegistrationTimeoutExc
 from src.exceptions.user_preferred_seats_occupied_exception import UserPreferredSeatsOccupiedException
 from src.interfaces.inotification import INotification
 from src.services.email.email_preparer_service import EmailPreparerService
+from src.services.email.email_template_provider import EmailTemplateProvider
 from src.services.google.google_calendar import GoogleCalendar
-from src.services.google.google_gmail import GoogleGmail
 from src.services.smtp_service import SMTPService
 from src.services.user_data_service import UserDataService
 from src.utils.date_utils import DateUtils
