@@ -1,6 +1,6 @@
 import base64
 import os
-from urllib.request import Request
+from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.errors import HttpError
@@ -29,6 +29,7 @@ class GoogleGmail(IEmailService):
         if os.path.exists(self.TOKEN_NAME):
             credentials = Credentials.from_authorized_user_file(self.TOKEN_NAME, self.get_scopes())
         if not credentials or not credentials.valid:
+            print(credentials.token_uri)
             if credentials and credentials.expired and credentials.refresh_token:
                 credentials.refresh(Request())
             else:

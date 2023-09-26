@@ -1,0 +1,19 @@
+club_id: 205
+credentials:
+  password: '22521520'
+  user: '0526064201'
+email: kerenshachal@gmail.com
+name: keren
+user_schedule:
+- in_progress: false
+  lesson_id: '10136'
+  seats: 24
+- in_progress: false
+  lesson_id: '10128'
+  seats: 24
+- in_progress: false
+  lesson_id: '10127'
+  seats: 24
+- in_progress: false
+  lesson_id: '10130'
+  seats: 24

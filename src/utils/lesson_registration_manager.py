@@ -24,6 +24,7 @@ from src.interfaces.inotification import INotification
 from src.services.email.email_preparer_service import EmailPreparerService
 from src.services.email.email_template_provider import EmailTemplateProvider
 from src.services.google.google_calendar import GoogleCalendar
+from src.services.google.google_gmail import GoogleGmail
 from src.services.smtp_service import SMTPService
 from src.services.user_data_service import UserDataService
 from src.utils.date_utils import DateUtils
@@ -111,14 +112,20 @@ class LessonRegistrationManager:
 
     def __send_remainder(self, seat: int):
         subject, body = EmailPreparerService().prepare_email(attendee_name=self.user_data_service.name, lesson=self.lesson, seat=seat)
-        SMTPService().send_email(to=self.user_data_service.email, subject=subject, body=body)
-        # GoogleGmail().send_email(to_email=self.user_data_service.email, subject=subject, body=body)
-        GoogleCalendar().create_event(
-            start_time=datetime.strptime(f'{self.lesson["date"]} {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}', '%Y/%m/%d %H:%M'),
-            summary=f'{self.lesson["type"].upper()} at {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}, seat number {seat}',
-            description='',
-            duration=60,
-            attendees=[self.user_data_service.email])
+        try:
+            GoogleGmail().send_email(to=self.user_data_service.email, subject=subject, body=body)
+        except Exception as ex:
+            self.logger.error(ex)
+            SMTPService().send_email(to=self.user_data_service.email, subject=subject, body=body)
+        try:
+            GoogleCalendar().create_event(
+                start_time=datetime.strptime(f'{self.lesson["date"]} {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}', '%Y/%m/%d %H:%M'),
+                summary=f'{self.lesson["type"].upper()} at {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}, seat number {seat}',
+                description='',
+                duration=60,
+                attendees=[self.user_data_service.email])
+        except Exception as ex:
+            self.logger.error(ex)
 
     def __do_work(self):
         """

@@ -43,7 +43,7 @@ class GoogleCalendar(ICalendarService):
         """
         return ['https://www.googleapis.com/auth/calendar']
 
-    def create_event(self, start_time: datetime, summary: str, description: str, duration: int, attendees: list) -> str:
+    def create_event(self, start_time: datetime, summary: str, description: str, duration: int, attendees: list, reminders: int = 660) -> str:
         """
         Creates an event on the primary Google Calendar and returns its link.
         :param start_time: A datetime representing the start of the event.
@@ -51,6 +51,8 @@ class GoogleCalendar(ICalendarService):
         :param description: A string representing the details of the event.
         :param duration: An integer representing the duration of the event in minutes.
         :param attendees: A list of email addresses to be added as attendees.
+        :param reminders: An integer representing the number of minutes before
+        the event starts to send a reminder. Default is 60 minutes.
         :return: A string containing the link to the created event.
         """
         # end_time = start_time + datetime.timedelta(minutes=duration)
@@ -69,8 +71,8 @@ class GoogleCalendar(ICalendarService):
             'reminders': {
                 'useDefault': False,
                 'overrides': [
-                    {'method': 'popup', 'minutes': 90},
-                    {'method': 'email', 'minutes': 90}
+                    {'method': 'popup', 'minutes': reminders},
+                    {'method': 'email', 'minutes': reminders}
                 ]
             },
             'attendees': [{'email': email} for email in attendees]
