@@ -10,6 +10,9 @@ from typing import Any
 
 
 class GoogleCalendar(ICalendarService):
+    CREDENTIALS_FILE_NAME = 'credentials.json'
+    TOKEN_NAME = 'calender_token.json'
+
     def __init__(self):
         """
         Initializes an instance of the GoogleCalendar class.
@@ -22,15 +25,15 @@ class GoogleCalendar(ICalendarService):
         :return: An authenticated service for Google Calendar API.
         """
         credentials = None
-        if os.path.exists('calender_token.json'):
-            credentials = Credentials.from_authorized_user_file('calender_token.json', self.get_scopes())
+        if os.path.exists(self.TOKEN_NAME):
+            credentials = Credentials.from_authorized_user_file(self.TOKEN_NAME, self.get_scopes())
         if not credentials or not credentials.valid:
             if credentials and credentials.expired and credentials.refresh_token:
                 credentials.refresh(Request())
             else:
-                flow = InstalledAppFlow.from_client_secrets_file(os.path.join(Project.root_path(), 'credentials.json'), self.get_scopes())
+                flow = InstalledAppFlow.from_client_secrets_file(os.path.join(Project.root_path(),self.CREDENTIALS_FILE_NAME), self.get_scopes())
                 credentials = flow.run_local_server(port=0)
-            with open('calender_token.json', 'w') as token:
+            with open(self.TOKEN_NAME, 'w') as token:
                 token.write(credentials.to_json())
         return build(serviceName='calendar', version='v3', credentials=credentials)
 
@@ -43,7 +46,7 @@ class GoogleCalendar(ICalendarService):
         """
         return ['https://www.googleapis.com/auth/calendar']
 
-    def create_event(self, start_time: datetime, summary: str, description: str, duration: int, attendees: list, reminders: int = 660) -> str:
+    def create_event(self, start_time: datetime, summary: str, description: str, duration: int, attendees: list, reminders: int = 60) -> str:
         """
         Creates an event on the primary Google Calendar and returns its link.
         :param start_time: A datetime representing the start of the event.

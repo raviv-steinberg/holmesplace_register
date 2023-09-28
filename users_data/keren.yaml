@@ -17,3 +17,9 @@ user_schedule:
 - in_progress: false
   lesson_id: '10130'
   seats: 24
+- in_progress: false
+  lesson_id: '10162'
+  seats: 24
+- in_progress: false
+  lesson_id: '10122'
+  seats: 24

@@ -287,6 +287,13 @@ clubs:
         lesson_id: '10021'
         instructor_id: '27'
     bodypump:
+      - day: wednesday
+        type: bodypump
+        start_time: '19:30'
+        registration_day: wednesday
+        registration_start_time: '17:30'
+        lesson_id: '10162'
+        instructor_id: '27'
       - day: thursday
         type: bodypump
         start_time: '19:15'

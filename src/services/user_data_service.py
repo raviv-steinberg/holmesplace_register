@@ -53,15 +53,6 @@ class UserDataService:
         """
         return self._user
 
-    @user.setter
-    def user(self, value: str):
-        """
-        Sets the user in the user data.
-        :param value: A string representing the user.
-        """
-        self._user = value
-        self._update_user_data('user', value)
-
     @property
     def password(self) -> str:
         """
@@ -69,15 +60,6 @@ class UserDataService:
         :return: A string representing the password.
         """
         return self._password
-
-    @password.setter
-    def password(self, value: str):
-        """
-        Sets the password in the user data.
-        :param value: A string representing the password.
-        """
-        self._password = value
-        self._update_user_data('password', value)
 
     @property
     def name(self) -> str:
@@ -175,6 +157,4 @@ class UserDataService:
             if lesson['lesson_id'] == lesson_id:
                 lesson['in_progress'] = in_progress
                 break
-        else:
-            self._choices.append({'lesson_id': lesson_id, 'in_progress': in_progress})
         self._update_user_data('user_schedule', self._choices)

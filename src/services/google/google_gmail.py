@@ -7,7 +7,7 @@ from googleapiclient.errors import HttpError
 from src.interfaces.google.iemail_service import IEmailService
 from googleapiclient.discovery import build
 from src.utils.project import Project
-from typing import Any
+from typing import Any, Dict, List
 
 
 class GoogleGmail(IEmailService):
@@ -29,7 +29,6 @@ class GoogleGmail(IEmailService):
         if os.path.exists(self.TOKEN_NAME):
             credentials = Credentials.from_authorized_user_file(self.TOKEN_NAME, self.get_scopes())
         if not credentials or not credentials.valid:
-            print(credentials.token_uri)
             if credentials and credentials.expired and credentials.refresh_token:
                 credentials.refresh(Request())
             else:
@@ -37,7 +36,7 @@ class GoogleGmail(IEmailService):
                 credentials = flow.run_local_server(port=0)
             with open(self.TOKEN_NAME, 'w') as token:
                 token.write(credentials.to_json())
-        return build('gmail', 'v1', credentials=credentials)
+        return build(serviceName='gmail', version='v1', credentials=credentials)
 
     def get_scopes(self) -> list:
         """
@@ -47,7 +46,7 @@ class GoogleGmail(IEmailService):
         for sending emails on their behalf.
         :return: A list of strings, where each string is an OAuth 2.0 scope URL.
         """
-        return ['https://www.googleapis.com/auth/gmail.send']
+        return ['https://www.googleapis.com/auth/gmail.send', 'https://www.googleapis.com/auth/gmail.readonly']
 
     def send_email(self, to: str, subject: str, body: str) -> None:
         """
@@ -71,3 +70,26 @@ class GoogleGmail(IEmailService):
             print(f"Message sent (ID: {sent_message['id']})")
         except HttpError:
             raise
+
+    def list_inbox_messages(self, max_results: int = 10) -> List[Dict[str, Any]]:
+        """
+        Lists the latest messages in the user's inbox.
+
+        :param max_results: The maximum number of messages to retrieve. Defaults to 10.
+        :return: A list of message details.
+        """
+        try:
+            response = self.service.users().messages().list(userId='me', maxResults=max_results, q="in:inbox").execute()
+
+            if 'messages' in response:
+                messages = []
+                for msg in response['messages']:
+                    msg_detail = self.service.users().messages().get(userId='me', id=msg['id']).execute()
+                    messages.append(msg_detail)
+                return messages
+            else:
+                print("No messages found in the inbox.")
+                return []
+        except HttpError as error:
+            print(f"An error occurred: {error}")
+            return []
