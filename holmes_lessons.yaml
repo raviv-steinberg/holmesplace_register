@@ -8,13 +8,6 @@ clubs:
         registration_start_time: '7:30'
         lesson_id: '10152'
         instructor_id: '27'
-      - day: sunday
-        type: pilates
-        start_time: '8:30'
-        registration_day: friday
-        registration_start_time: '8:30'
-        lesson_id: '10223'
-        instructor_id: '27'
       - day: monday
         type: pilates
         start_time: '8:30'
@@ -209,6 +202,13 @@ clubs:
         instructor_id: '351'
       - day: thursday
         type: shape
+        start_time: '8:30'
+        registration_day: thursday
+        registration_start_time: '8:30'
+        lesson_id: '10170'
+        instructor_id: '351'
+      - day: thursday
+        type: shape
         start_time: '17:30'
         registration_day: thursday
         registration_start_time: '15:30'
@@ -323,3 +323,11 @@ clubs:
            registration_start_time: '9:30'
            lesson_id: '10022'
            instructor_id: '50'
+    fitball:
+      - day: sunday
+        type: fitball
+        start_time: '8:30'
+        registration_day: friday
+        registration_start_time: '8:30'
+        lesson_id: '10223'
+        instructor_id: '27'

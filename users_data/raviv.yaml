@@ -8,3 +8,9 @@ user_schedule:
 - in_progress: false
   lesson_id: '10128'
   seats: 30 31 32
+- in_progress: false
+  lesson_id: '10152'
+  seats: 4
+- in_progress: false
+  lesson_id: '10223'
+  seats: 4
