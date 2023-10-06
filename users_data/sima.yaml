@@ -5,47 +5,36 @@ credentials:
 email: simak@agri.gov.il
 name: sima
 user_schedule:
-# sunday 7:30
 - in_progress: false
   lesson_id: '10152'
   seats: 17 18
-# sunday 8:30
 - in_progress: false
   lesson_id: '10223'
   seats: 17 18
-# monday 7:30
 - in_progress: false
   lesson_id: '10161'
   seats: 17 18
-# monday 8:30
 - in_progress: false
   lesson_id: '10099'
   seats: 17 18
-# tuesday 8:30
 - in_progress: false
   lesson_id: '10054'
   seats: 17 18
-# wednesday 8:30
 - in_progress: false
   lesson_id: '10025'
   seats: 17 18
-# thursday 8:30
 - in_progress: false
   lesson_id: '10179'
   seats: 17 18
-# thursday 9:30
 - in_progress: false
   lesson_id: '10042'
   seats: 17 18
-# friday 8:30
 - in_progress: false
   lesson_id: '10015'
   seats: 17 18
-# saturday 9:30
 - in_progress: false
   lesson_id: '10100'
   seats: 17 18
-# saturday 10:30
 - in_progress: false
   lesson_id: '10113'
   seats: 17 18

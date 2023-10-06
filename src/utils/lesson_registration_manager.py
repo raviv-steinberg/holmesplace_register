@@ -112,20 +112,21 @@ class LessonRegistrationManager:
 
     def __send_remainder(self, seat: int):
         subject, body = EmailPreparerService().prepare_email(attendee_name=self.user_data_service.name, lesson=self.lesson, seat=seat)
-        try:
-            GoogleGmail().send_email(to=self.user_data_service.email, subject=subject, body=body)
-        except Exception as ex:
-            self.logger.error(ex)
-            SMTPService().send_email(to=self.user_data_service.email, subject=subject, body=body)
-        try:
-            GoogleCalendar().create_event(
-                start_time=datetime.strptime(f'{self.lesson["date"]} {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}', '%Y/%m/%d %H:%M'),
-                summary=f'{self.lesson["type"].upper()} at {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}, seat number {seat}',
-                description='',
-                duration=60,
-                attendees=[self.user_data_service.email])
-        except Exception as ex:
-            self.logger.error(ex)
+        SMTPService().send_email(to=self.user_data_service.email, subject=subject, body=body)
+        # try:
+        #     GoogleGmail().send_email(to=self.user_data_service.email, subject=subject, body=body)
+        # except Exception as ex:
+        #     self.logger.error(ex)
+        #     SMTPService().send_email(to=self.user_data_service.email, subject=subject, body=body)
+        # try:
+        #     GoogleCalendar().create_event(
+        #         start_time=datetime.strptime(f'{self.lesson["date"]} {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}', '%Y/%m/%d %H:%M'),
+        #         summary=f'{self.lesson["type"].upper()} at {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}, seat number {seat}',
+        #         description='',
+        #         duration=60,
+        #         attendees=[self.user_data_service.email])
+        # except Exception as ex:
+        #     self.logger.error(ex)
 
     def __do_work(self):
         """
@@ -271,7 +272,7 @@ class LessonRegistrationManager:
                 return
             except LessonNotOpenForRegistrationException as ex:
                 self.logger.warning(ex)
-            except (LessonTimeDoesNotExistException, RegistrationForThisLessonAlreadyExistsException, NoMatchingSubscriptionException, LessonCanceledException):
+            except (BikeOccupiedException, LessonTimeDoesNotExistException, RegistrationForThisLessonAlreadyExistsException, NoMatchingSubscriptionException, LessonCanceledException):
                 raise
             except requests.exceptions.HTTPError as ex:
                 self.logger.error(ex)

@@ -1,5 +1,5 @@
 import smtplib
-from typing import Any
+from typing import Any, List, Dict
 from src.interfaces.google.iemail_service import IEmailService
 from email.header import Header
 from email.mime.multipart import MIMEMultipart
@@ -18,6 +18,9 @@ class SMTPService(IEmailService):
         - Sending the email.
     Exceptions related to email sending and validation are logged for troubleshooting.
     """
+
+    def list_inbox_messages(self, max_results: int = 10) -> List[Dict[str, Any]]:
+        pass
 
     def __init__(self):
         """
