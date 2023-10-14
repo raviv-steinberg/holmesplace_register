@@ -331,3 +331,39 @@ clubs:
         registration_start_time: '8:30'
         lesson_id: '10223'
         instructor_id: '27'
+    gum:
+      - day: saturday
+        type: gym
+        start_time: '9:00'
+        registration_day: saturday
+        registration_start_time: '7:00'
+        lesson_id: '200219'
+        instructor_id: '27'
+      -  day: saturday
+         type: gym
+         start_time: '10:15'
+         registration_day: saturday
+         registration_start_time: '8:15'
+         lesson_id: '200223'
+         instructor_id: '27'
+      -  day: saturday
+         type: gym
+         start_time: '11:30'
+         registration_day: saturday
+         registration_start_time: '9:30'
+         lesson_id: '200003'
+         instructor_id: '27'
+      -  day: saturday
+         type: gym
+         start_time: '12:15'
+         registration_day: saturday
+         registration_start_time: '10:15'
+         lesson_id: '200301'
+         instructor_id: '27'
+      -  day: saturday
+         type: gym
+         start_time: '13:30'
+         registration_day: saturday
+         registration_start_time: '11:30'
+         lesson_id: '200267'
+         instructor_id: '27'
