@@ -1,0 +1,28 @@
+club_id: 205
+credentials:
+  password: Yardenki12
+  user: '0526470704'
+email: yardekoch@gmail.com
+name: yarden
+user_schedule:
+- in_progress: false
+  lesson_id: '10152'
+  seats: 4 2
+- in_progress: false
+  lesson_id: '10223'
+  seats: 4 2
+- in_progress: false
+  lesson_id: '10099'
+  seats: 4 2
+- in_progress: false
+  lesson_id: '10024'
+  seats: 3 5
+- in_progress: false
+  lesson_id: '10044'
+  seats: 4 2
+- in_progress: false
+  lesson_id: '10081'
+  seats: 4 2
+- in_progress: false
+  lesson_id: '10015'
+  seats: 4 2

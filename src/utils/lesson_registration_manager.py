@@ -104,11 +104,10 @@ class LessonRegistrationManager:
         Logs out the user from the system.
         :return: None
         """
-        if self._is_logged_in:
-            time.sleep(2)
-            self.api.logout()
-            self._is_logged_in = False
-            self.logger.info(f'User \'{self.user_data_service.user}\' successfully logged out.')
+        time.sleep(2)
+        self.api.logout()
+        self._is_logged_in = False
+        self.logger.info(f'User \'{self.user_data_service.user}\' successfully logged out.')
 
     def __send_remainder(self, seat: int):
         subject, body = EmailPreparerService().prepare_email(attendee_name=self.user_data_service.name, lesson=self.lesson, seat=seat)
@@ -141,11 +140,13 @@ class LessonRegistrationManager:
         """
         try:
             self.__handle_registration_process()
-            seat = self.__wait_before_registration_start()
+            try:
+                seat = self.__wait_before_registration_start()
+            except BikeOccupiedException:
+                seat = self.__register()
             if seat:
                 self.__send_remainder(seat=seat)
                 return
-            seat = self.__register()
             if seat:
                 self.__send_remainder(seat=seat)
         except (LessonNotFoundException, LessonNotOpenForRegistrationException, LessonTimeDoesNotExistException,
@@ -188,8 +189,6 @@ class LessonRegistrationManager:
         try:
             self.__wait_until_registration_starts(seat=seat)
             return seat
-        except BikeOccupiedException:
-            self.logger.warning(msg=f'Preferred seat {seat} is occupied.')
         except Exception:
             raise
 
@@ -212,9 +211,12 @@ class LessonRegistrationManager:
         """
         self.logger.debug('Attempting registration with other priority seats.')
         while len(self.seats) > 0:
-            seat = self.seats.pop(0)
-            if self.__try_to_register_lesson(seat=seat):
-                return seat
+            try:
+                seat = self.seats.pop(0)
+                if self.__try_to_register_lesson(seat=seat):
+                    return seat
+            except Exception as ex:
+                self.logger.error(ex)
         seat = self.__register_by_random()
         if seat:
             return seat
@@ -272,6 +274,7 @@ class LessonRegistrationManager:
                 return
             except LessonNotOpenForRegistrationException as ex:
                 self.logger.warning(ex)
+                time.sleep(1)
             except (BikeOccupiedException, LessonTimeDoesNotExistException, RegistrationForThisLessonAlreadyExistsException, NoMatchingSubscriptionException, LessonCanceledException):
                 raise
             except requests.exceptions.HTTPError as ex:
@@ -293,6 +296,7 @@ class LessonRegistrationManager:
             return True
         except BikeOccupiedException as ex:
             self.logger.warning(ex)
+            raise
         except Exception:
             raise
 

@@ -7,19 +7,22 @@ name: dana
 user_schedule:
 - in_progress: false
   lesson_id: '10160'
-  seats: 5 8 6
+  seats: 4 5 8 6
 - in_progress: false
   lesson_id: '10127'
-  seats: 5 8 6
+  seats: 4 5 8 6
 - in_progress: false
   lesson_id: '10128'
-  seats: 5 8 6
+  seats: 4 5 8 6
 - in_progress: false
   lesson_id: '10130'
-  seats: 5 8 6
+  seats: 4 5 8 6
 - in_progress: false
   lesson_id: '10126'
-  seats: 5 8 6
+  seats: 4 5 8 6
+- in_progress: false
+  lesson_id: '10129'
+  seats: 4 5 8 6
 - in_progress: false
   lesson_id: '10173'
   seats: 3 2 1
@@ -50,3 +53,6 @@ user_schedule:
 - in_progress: false
   lesson_id: '10048'
   seats: 3 2 1
+- in_progress: false
+  lesson_id: '10125'
+  seats: 12

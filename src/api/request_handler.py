@@ -46,7 +46,7 @@ class RequestHandler:
         session = cls.get_session()
 
         # Customizable timeout support with a default timeout of 10 seconds.
-        timeout = kwargs.get('timeout', 10)
+        timeout = kwargs.get('timeout', 60)
 
         try:
             return session.request(method, timeout=timeout, **kwargs)

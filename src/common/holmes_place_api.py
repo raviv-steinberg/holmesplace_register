@@ -84,3 +84,12 @@ class HolmesPlaceAPI:
             data=f'branchID={params["club_id"]}&lessonID={params["lesson_id"]}&date={params["date"]}&time={params["start_time"]}&instructorID={params["instructor_id"]}&seatID={seat}',
             headers={'content-type': 'application/x-www-form-urlencoded; charset=UTF-8'})
 
+    def register(self, user: str, birthday, password) -> Response:
+        return ApiHandler.request(
+            'POST',
+            url=self.config['urls']['register'].format(base_url=self.base_url),
+            data=f'phone={user}&password={password}&birthday={birthday}',
+            headers={"content-type": "application/x-www-form-urlencoded; charset=UTF-8"}
+        )
+
+        # return self.session.post(url=url, data=f'phone={user}&password={password}&birthday={birthday}', headers={"content-type": "application/x-www-form-urlencoded; charset=UTF-8"})
