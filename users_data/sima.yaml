@@ -30,8 +30,8 @@ user_schedule:
   lesson_id: '10113'
   seats: 17 18
 - in_progress: false
-  lesson_id: '10054'
-  seats: 17 18
+  lesson_id: '10051'
+  seats: 14 15
 - in_progress: false
   lesson_id: '10049'
   seats: 14 15
