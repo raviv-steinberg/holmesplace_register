@@ -23,8 +23,8 @@ from src.exceptions.user_preferred_seats_occupied_exception import UserPreferred
 from src.interfaces.inotification import INotification
 from src.services.email.email_preparer_service import EmailPreparerService
 from src.services.email.email_template_provider import EmailTemplateProvider
-from src.services.google.google_calendar import GoogleCalendar
-from src.services.google.google_gmail import GoogleGmail
+# from src.services.google.google_calendar import GoogleCalendar
+# from src.services.google.google_gmail import GoogleGmail
 from src.services.smtp_service import SMTPService
 from src.services.user_data_service import UserDataService
 from src.utils.date_utils import DateUtils
@@ -192,7 +192,7 @@ class LessonRegistrationManager:
         except Exception:
             raise
 
-    def __wait_n_seconds_before_registration_start(self, seconds_before: int = 30) -> None:
+    def __wait_n_seconds_before_registration_start(self, seconds_before: int = 15) -> None:
         """
         Waits for a specified number of seconds before the lesson's registration start time.
         :param seconds_before: The number of seconds to wait before the lesson's registration starts. Default is 30 seconds.
@@ -201,7 +201,7 @@ class LessonRegistrationManager:
         self.logger.debug(msg=f'\'{self.lesson["type"]}\' registration start time: {self.lesson["registration_start_time"]}.')
         target = DateUtils.get_target_time(time=self.lesson['registration_start_time'], seconds_before=seconds_before)
         self.logger.debug(msg=f'Pausing until {target} ({seconds_before} seconds before registration starts).')
-        pause.until(time=target)
+        # pause.until(time=target)
         self.logger.debug(msg=f'Resumed execution. Current time: {DateUtils.current_time()}')
 
     def __register(self) -> int:
