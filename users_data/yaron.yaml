@@ -2,7 +2,18 @@ club_id: 205
 credentials:
   password: yaron1357
   user: 0506291251
+email: n@gmail.com
+name: yaron
 user_schedule:
 - in_progress: false
-  lesson_id: '10128'
-  seats: 6 8 3
+  lesson_id: '10152'
+  seats: 2 1
+- in_progress: false
+  lesson_id: '10223'
+  seats: 2 1
+- in_progress: false
+  lesson_id: '10044'
+  seats: 2 1
+- in_progress: false
+  lesson_id: '10081'
+  seats: 2 1

@@ -201,7 +201,7 @@ class LessonRegistrationManager:
         self.logger.debug(msg=f'\'{self.lesson["type"]}\' registration start time: {self.lesson["registration_start_time"]}.')
         target = DateUtils.get_target_time(time=self.lesson['registration_start_time'], seconds_before=seconds_before)
         self.logger.debug(msg=f'Pausing until {target} ({seconds_before} seconds before registration starts).')
-        # pause.until(time=target)
+        pause.until(time=target)
         self.logger.debug(msg=f'Resumed execution. Current time: {DateUtils.current_time()}')
 
     def __register(self) -> int:
