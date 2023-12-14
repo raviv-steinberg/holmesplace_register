@@ -22,4 +22,4 @@ user_schedule:
   seats: 5
 - in_progress: false
   lesson_id: '10127'
-  seats: 3
+  seats: 3 5
