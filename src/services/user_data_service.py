@@ -27,6 +27,7 @@ class UserDataService:
         self._name = content.get('name')
         self._email = content.get('email')
         self._choices = content.get('user_schedule', [])
+        self._notify = content.get('notify', None)
 
     @property
     def club_id(self) -> int:
@@ -102,6 +103,14 @@ class UserDataService:
         :return: A list of dictionaries representing the user's choices.
         """
         return self._choices
+
+    @property
+    def notify(self) -> bool:
+        """
+        Gets the Notify value from the user data.
+        :return: A boolean value indicate if the user wants to be notify by email about the registration results..
+        """
+        return self._notify
 
     @choices.setter
     def choices(self, value: list):

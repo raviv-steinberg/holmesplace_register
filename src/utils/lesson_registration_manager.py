@@ -147,7 +147,7 @@ class LessonRegistrationManager:
             if seat:
                 self.__send_remainder(seat=seat)
                 return
-            if seat:
+            if seat and self.user_data_service.notify:
                 self.__send_remainder(seat=seat)
         except (LessonNotFoundException, LessonNotOpenForRegistrationException, LessonTimeDoesNotExistException,
                 MultipleDevicesConnectionException, NoAvailableSeatsException, NoMatchingSubscriptionException, LessonCanceledException,
