@@ -64,7 +64,9 @@ class UserLessonSchedulerService:
         :return: A tuple containing the lesson's ID and the time remaining until registration (in minutes).
         Returns (None, None) if no lesson meets the criteria.
         """
-        return next((lesson_tuple for lesson_tuple in self.get_upcoming_lessons() if lesson_tuple[1] <= threshold_minutes), (None, None))
+        lessons = self.get_upcoming_lessons()
+        print(lessons)
+        return next((lesson_tuple for lesson_tuple in lessons if lesson_tuple[1] <= threshold_minutes), (None, None))
 
     def __calculate_time_until(self, registration_day: str, registration_time: time) -> float:
         """
