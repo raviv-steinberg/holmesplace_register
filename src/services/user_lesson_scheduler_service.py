@@ -4,6 +4,7 @@ Date: 06/09/2023
 """
 import time
 from datetime import datetime, timedelta
+import pytz
 from src.services.user_data_service import UserDataService
 from src.utils.lessons_manager import LessonsManager
 
@@ -75,6 +76,7 @@ class UserLessonSchedulerService:
         """
         now = datetime.now()
         print(now)
+        print(UserLessonSchedulerService.__get_utc_plus_2_time())
         target_weekday = self.WEEKDAYS.index(registration_day)
 
         # Calculate the difference in days to the target weekday.
@@ -91,3 +93,12 @@ class UserLessonSchedulerService:
         # Return difference in minutes.
         time_diff = target_datetime - now
         return time_diff.total_seconds() / 60
+
+    @staticmethod
+    def __get_utc_plus_2_time():
+        # Get the current UTC time
+        time_now_utc = datetime.now(pytz.utc)
+
+        # Add 2 hours to get UTC+2 time
+        time_now_utc_plus_2 = time_now_utc + timedelta(hours=2)
+        return time_now_utc_plus_2
