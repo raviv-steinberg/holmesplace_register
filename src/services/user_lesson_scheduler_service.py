@@ -74,6 +74,7 @@ class UserLessonSchedulerService:
         :return: Time in minutes from now until the specified registration day and time.
         """
         now = datetime.now()
+        print(now)
         target_weekday = self.WEEKDAYS.index(registration_day)
 
         # Calculate the difference in days to the target weekday.
