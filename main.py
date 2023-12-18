@@ -5,7 +5,6 @@ from src.utils.date_utils import DateUtils
 from src.utils.lesson_registration_manager_factory import LessonRegistrationManagerFactory
 
 if __name__ == "__main__":
-    print(DateUtils.current_time())
     # Exception: (36) השיעור מלא.
     threshold = 3
     sleep_time = 60
