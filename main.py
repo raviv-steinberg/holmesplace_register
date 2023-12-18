@@ -6,7 +6,7 @@ from src.utils.lesson_registration_manager_factory import LessonRegistrationMana
 
 if __name__ == "__main__":
     # Exception: (36) השיעור מלא.
-    threshold = 7
+    threshold = 10
     sleep_time = 60
     source_user_data_file = 'users_data/raviv.yaml'
     service = UserDataService(filepath=source_user_data_file)
@@ -15,6 +15,6 @@ if __name__ == "__main__":
     if lesson_id:
         manager = LessonRegistrationManagerFactory(user_data_service=service, lesson_id=lesson_id).get()
         manager.register_lesson()
-    else:
-        print(f'[{DateUtils.current_time()}]: No lesson found that starts within {threshold} minutes, sleep {sleep_time} seconds and retry...')
-        time.sleep(sleep_time)
+    # else:
+    #     print(f'[{DateUtils.current_time()}]: No lesson found that starts within {threshold} minutes, sleep {sleep_time} seconds and retry...')
+    #     time.sleep(sleep_time)
