@@ -86,7 +86,6 @@ class DateUtils:
         """
         return time_str[:2] + ":" + time_str[2:4]
 
-
     @staticmethod
     def current_time() -> datetime.datetime:
         """
@@ -94,4 +93,3 @@ class DateUtils:
         :return: datetime.datetime: Current datetime object.
         """
         return datetime.datetime.now()
-
