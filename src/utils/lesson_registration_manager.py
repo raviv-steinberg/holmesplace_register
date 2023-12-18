@@ -147,8 +147,12 @@ class LessonRegistrationManager:
             if seat:
                 self.__send_remainder(seat=seat)
                 return
-            if seat and self.user_data_service.notify:
-                self.__send_remainder(seat=seat)
+            if seat:
+                if self.user_data_service.notify:
+                    self.logger.debug(msg=f'user\'s notify value is {self.user_data_service.notify}, Send an email')
+                    self.__send_remainder(seat=seat)
+                else:
+                    self.logger.debug(msg=f'user\'s notify value is {self.user_data_service.notify}, An email will not be sent')
         except (LessonNotFoundException, LessonNotOpenForRegistrationException, LessonTimeDoesNotExistException,
                 MultipleDevicesConnectionException, NoAvailableSeatsException, NoMatchingSubscriptionException, LessonCanceledException,
                 RegistrationForThisLessonAlreadyExistsException, RegistrationTimeoutException, UserPreferredSeatsOccupiedException) as ex:

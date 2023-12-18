@@ -108,9 +108,9 @@ class UserDataService:
     def notify(self) -> bool:
         """
         Gets the Notify value from the user data.
-        :return: A boolean value indicate if the user wants to be notify by email about the registration results..
+        :return: A boolean value indicate if the user wants to be Notify by email about the registration results..
         """
-        return self._notify
+        return True if self._notify else False
 
     @choices.setter
     def choices(self, value: list):
