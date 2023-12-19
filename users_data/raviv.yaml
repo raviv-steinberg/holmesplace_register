@@ -3,9 +3,7 @@ credentials:
   password: '12345678'
   user: 0547558333
 email: raviv.steinberg@gmail.com
-notify: true
 name: raviv
+notify: true
 user_schedule:
-- in_progress: false
-  lesson_id: '10121'
-  seats: 5
+

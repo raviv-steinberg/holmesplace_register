@@ -4,6 +4,7 @@ credentials:
   user: '0527206014'
 email: dana.kagan@gmail.com
 name: dana
+notify: true
 user_schedule:
 - in_progress: false
   lesson_id: '10160'

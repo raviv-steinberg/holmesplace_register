@@ -145,14 +145,12 @@ class LessonRegistrationManager:
             except BikeOccupiedException:
                 seat = self.__register()
             if seat:
-                self.__send_remainder(seat=seat)
-                return
-            if seat:
                 if self.user_data_service.notify:
                     self.logger.debug(msg=f'user\'s notify value is {self.user_data_service.notify}, Send an email')
                     self.__send_remainder(seat=seat)
                 else:
                     self.logger.debug(msg=f'user\'s notify value is {self.user_data_service.notify}, An email will not be sent')
+                return
         except (LessonNotFoundException, LessonNotOpenForRegistrationException, LessonTimeDoesNotExistException,
                 MultipleDevicesConnectionException, NoAvailableSeatsException, NoMatchingSubscriptionException, LessonCanceledException,
                 RegistrationForThisLessonAlreadyExistsException, RegistrationTimeoutException, UserPreferredSeatsOccupiedException) as ex:
