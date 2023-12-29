@@ -4,8 +4,8 @@ credentials:
   user: '0506220642'
 email: simak@agri.gov.il
 name: sima
-notify_start_running: true
 notify_result: true
+notify_start_running: true
 user_schedule:
 - in_progress: false
   lesson_id: '10152'

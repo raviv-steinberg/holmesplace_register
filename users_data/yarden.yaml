@@ -4,8 +4,8 @@ credentials:
   user: '0526470704'
 email: yardekoch@gmail.com
 name: yarden
-notify_start_running: true
 notify_result: true
+notify_start_running: true
 user_schedule:
 - in_progress: false
   lesson_id: '10152'
