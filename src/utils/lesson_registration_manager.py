@@ -350,20 +350,19 @@ class LessonRegistrationManager:
         if not self.seats:
             raise UserPreferredSeatsOccupiedException
 
-    @staticmethod
-    def __get_email_start_running_subject() -> str:
+    def __get_email_start_running_subject(self) -> str:
         """
         Get subject of start running message.
         :return: String representation of stat running message.
         """
-        return '🤖 Robot Starts Running!'
+        return f'🤖 {self.lesson["type"].upper()} Robot Starts Running!'
 
     def __get_email_start_running_body(self) -> str:
         """
         Get subject of start running message.
         :return: String representation of stat running message.
         """
-        return f'Pilates lesson on {self.lesson["day"].upper()}, {self.lesson["date"]} at {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}'
+        return f'{self.lesson["type"].upper()} lesson on {self.lesson["day"].upper()}, {self.lesson["date"]} at {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}'
 
     @staticmethod
     def __check_exception_message(error_msg: str) -> None:
