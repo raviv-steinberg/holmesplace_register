@@ -363,47 +363,7 @@ class LessonRegistrationManager:
         Get subject of start running message.
         :return: String representation of stat running message.
         """
-        # return f'Pilates lesson on {self.lesson["day"].upper()}, {self.lesson["date"]} at {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}'
-        return """
-        <!DOCTYPE html>
-<html lang="en">
-<head>
-    <style>
-        body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f4f4f4;
-}
-
-.bootcamp-rectangle {
-    width: 500px; /* Adjust as needed */
-    height: 450px; /* Adjust as needed */
-    background-color: #007bff; /* Example color */
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px; /* 10px border radius */
-    font-family: Arial, sans-serif;
-    font-size: 20px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-    </style>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bootcamp Rectangle</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="bootcamp-rectangle">Bootcamp</div>
-</body>
-</html>
-        """
+        return f'Pilates lesson on {self.lesson["day"].upper()}, {self.lesson["date"]} at {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}'
 
     @staticmethod
     def __check_exception_message(error_msg: str) -> None:
