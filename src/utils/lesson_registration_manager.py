@@ -58,7 +58,7 @@ class LessonRegistrationManager:
         self.notifier = notifier
 
     def __repr__(self):
-        return f'Start the registration process for the \'{self.lesson["type"]}\' lesson for user \'{self.user_data_service.user}\'' \
+        return f'Start the registration process for the \'{self.lesson["type"].upper()}\' lesson' \
                f' on {self.lesson["day"].upper()}, {self.lesson["date"]} at {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}'
 
     @staticmethod
@@ -82,6 +82,12 @@ class LessonRegistrationManager:
         Registers the user for the specified lesson by either priority or random seat choice.
         :return: None
         """
+        if self.user_data_service.notify_start_running:
+            self.logger.debug(msg=f'user\'s notify start running value is {self.user_data_service.notify_start_running}, Send an email')
+            SMTPService().send_email(to=self.user_data_service.email, subject=self.__get_email_start_running_subject(), body=self.__get_email_start_running_body())
+        else:
+            self.logger.debug(msg=f'user\'s notify start_running value is {self.user_data_service.notify_start_running}, An email will not be sent')
+
         self.logger.info(self)
         self.__do_work()
 
@@ -145,11 +151,11 @@ class LessonRegistrationManager:
             except BikeOccupiedException:
                 seat = self.__register()
             if seat:
-                if self.user_data_service.notify:
-                    self.logger.debug(msg=f'user\'s notify value is {self.user_data_service.notify}, Send an email')
+                if self.user_data_service.notify_result:
+                    self.logger.debug(msg=f'user\'s notify result value is {self.user_data_service.notify_result}, Send an email')
                     self.__send_remainder(seat=seat)
                 else:
-                    self.logger.debug(msg=f'user\'s notify value is {self.user_data_service.notify}, An email will not be sent')
+                    self.logger.debug(msg=f'user\'s notify result value is {self.user_data_service.notify_result}, An email will not be sent')
                 return
         except (LessonNotFoundException, LessonNotOpenForRegistrationException, LessonTimeDoesNotExistException,
                 MultipleDevicesConnectionException, NoAvailableSeatsException, NoMatchingSubscriptionException, LessonCanceledException,
@@ -343,6 +349,61 @@ class LessonRegistrationManager:
             self.logger.warning(msg=f'{seats_before - seats_after} user\'s preferred seat(s) occupied.')
         if not self.seats:
             raise UserPreferredSeatsOccupiedException
+
+    @staticmethod
+    def __get_email_start_running_subject() -> str:
+        """
+        Get subject of start running message.
+        :return: String representation of stat running message.
+        """
+        return '🤖 Robot Starts Running!'
+
+    def __get_email_start_running_body(self) -> str:
+        """
+        Get subject of start running message.
+        :return: String representation of stat running message.
+        """
+        # return f'Pilates lesson on {self.lesson["day"].upper()}, {self.lesson["date"]} at {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}'
+        return """
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+.bootcamp-rectangle {
+    width: 500px; /* Adjust as needed */
+    height: 450px; /* Adjust as needed */
+    background-color: #007bff; /* Example color */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px; /* 10px border radius */
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootcamp Rectangle</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bootcamp-rectangle">Bootcamp</div>
+</body>
+</html>
+        """
 
     @staticmethod
     def __check_exception_message(error_msg: str) -> None:
