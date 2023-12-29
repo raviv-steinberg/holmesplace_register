@@ -27,7 +27,8 @@ class UserDataService:
         self._name = content.get('name')
         self._email = content.get('email')
         self._choices = content.get('user_schedule', [])
-        self._notify = content.get('notify', None)
+        self._notify_start_running = content.get('notify_start_running', None)
+        self._notify_result = content.get('notify_result', None)
 
     @property
     def club_id(self) -> int:
@@ -105,12 +106,20 @@ class UserDataService:
         return self._choices
 
     @property
-    def notify(self) -> bool:
+    def notify_result(self) -> bool:
         """
-        Gets the Notify value from the user data.
+        Gets the Notify result value from the user data.
         :return: A boolean value indicate if the user wants to be Notify by email about the registration results..
         """
-        return True if self._notify else False
+        return True if self._notify_result else False
+
+    @property
+    def notify_start_running(self) -> bool:
+        """
+        Gets the Notify start running value from the user data.
+        :return: A boolean value indicate if the user wants to be Notify by email about the registration start process running..
+        """
+        return True if self._notify_start_running else False
 
     @choices.setter
     def choices(self, value: list):
