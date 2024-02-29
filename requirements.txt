@@ -6,6 +6,7 @@ charset-normalizer==3.2.0
 coloredlogs==15.0.1
 cryptography==41.0.4
 docopt==0.6.2
+fake-useragent==1.4.0
 google-api-core==2.11.1
 google-api-python-client==2.100.0
 google-auth==2.23.0

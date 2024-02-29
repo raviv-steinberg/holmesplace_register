@@ -2,10 +2,10 @@
 Author: raviv steinberg
 Date: 04/09/2023
 """
-import logging
 from requests import Response
 from src.api.api_handler import ApiHandler
 from src.utils.yaml_handler import YAMLHandler
+from fake_useragent import UserAgent
 
 
 class HolmesPlaceAPI:
@@ -26,6 +26,7 @@ class HolmesPlaceAPI:
         """
         self.config = YAMLHandler.get_content(filepath='config.yaml')
         self.base_url = self.config['base_url']
+        self.user_agent = UserAgent().random
 
     def login(self, user: str, password: str) -> Response:
         """
@@ -38,7 +39,7 @@ class HolmesPlaceAPI:
             'POST',
             url=self.config['urls']['login'].format(base_url=self.base_url),
             data=f'phone={user}&password={password}',
-            headers={'content-type': 'application/x-www-form-urlencoded; charset=UTF-8'})
+            headers=self._get_headers())
 
     def logout(self) -> Response:
         """
@@ -60,7 +61,7 @@ class HolmesPlaceAPI:
             'POST',
             url=self.config['urls']['available_seats'].format(base_url=self.base_url),
             data=f'branchID={params["club_id"]}&lessonID={params["lesson_id"]}&date={params["date"]}&time={params["start_time"]}',
-            headers={'content-type': 'application/x-www-form-urlencoded; charset=UTF-8'})
+            headers=self._get_headers())
 
     def register_lesson(self, params: dict):
         """
@@ -69,7 +70,7 @@ class HolmesPlaceAPI:
         """
         url = self.config['urls']['register_to_lesson'].format(base_url=self.base_url)
         data = f'branchID={params["lesson"]["club_id"]}&lessonID={params["lesson"]["id"]}&date={params["lesson"]["date"]}&time={params["lesson"]["start_time"]}&instructorID={params["instructor_id"]}'
-        headers = {'content-type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+        headers = self._get_headers()
         ApiHandler.request('POST', url, data=data, headers=headers)
 
     def register_lesson_with_seat(self, params: dict, seat: int) -> Response:
@@ -82,7 +83,7 @@ class HolmesPlaceAPI:
             'POST',
             url=self.config['urls']['register_to_lesson_with_seat'].format(base_url=self.base_url),
             data=f'branchID={params["club_id"]}&lessonID={params["lesson_id"]}&date={params["date"]}&time={params["start_time"]}&instructorID={params["instructor_id"]}&seatID={seat}',
-            headers={'content-type': 'application/x-www-form-urlencoded; charset=UTF-8'})
+            headers=self._get_headers())
 
     def register(self, user: str, birthday, password) -> Response:
         return ApiHandler.request(
@@ -92,4 +93,12 @@ class HolmesPlaceAPI:
             headers={"content-type": "application/x-www-form-urlencoded; charset=UTF-8"}
         )
 
-        # return self.session.post(url=url, data=f'phone={user}&password={password}&birthday={birthday}', headers={"content-type": "application/x-www-form-urlencoded; charset=UTF-8"})
+    def _get_headers(self):
+        """
+        Get headers with a random User-Agent.
+        :return: dict: Headers with a random User-Agent.
+        """
+        return {
+            'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'User-Agent': self.user_agent
+        }
