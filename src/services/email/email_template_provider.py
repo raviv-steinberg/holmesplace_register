@@ -41,7 +41,18 @@ class EmailTemplateProvider:
             'Join the Spin Revolution! 🚴‍♂️',
             'Pedal to the Peak of Fitness! 🚴‍♀️',
             'Elevate Every Spin Session! 🚴',
-            'Commit to Spin, Commit to Win! 🚴‍♂️'
+            'Commit to Spin, Commit to Win! 🚴‍♂️',
+            'Cycle Your Way to Success! 🚴',
+            'Turn and Burn: The Spinning Experience! 🚴‍♂️',
+            'Spin to the Rhythm of Fitness! 🚴‍♀️',
+            'Energize with Every Spin! 🚴',
+            'Spinning: The Ride of Your Life! 🚴‍♂️',
+            'Cycle Towards Your Fitness Goals! 🚴‍♀️',
+            'Rev Up Your Spin Game! 🚴',
+            'Spin, Sweat, Smile! 🚴',
+            'The Ultimate Spin Challenge Awaits! 🚴',
+            'Feel the Spin, Embrace the Rush! 🚴‍♂️'
+
         ],
         'pilates': [
             'Pilates Party Alert! 🤸‍♀️ Are You In?',
@@ -68,7 +79,17 @@ class EmailTemplateProvider:
             'Pilates: Your Path to Poise and Power! 🤸‍♀️',
             'Strengthen from Within with Pilates! 🤸',
             'Pilates: Sculpt, Shape, Shine! 🤸‍♀️',
-            'Experience Pilates Perfection! 🤸'
+            'Experience Pilates Perfection! 🤸',
+            'Pilates: Your Body\'s Best Friend! 🤸‍♀️',
+            'Elevate Your Essence with Pilates! 🤸',
+            'Pilates: The Grace of Movement! 🤸‍♂️',
+            'Flow with the Pilates Pulse! 🤸',
+            'Pilates: Stretch into Your Best Self! 🤸‍♀️',
+            'Transform with Every Pilates Pose! 🤸',
+            'Pilates Perfection: Flex and Flow! 🤸‍♂️',
+            'Sculpt and Tone with Pilates Power! 🤸',
+            'Pilates: Your Path to Poise and Grace! 🤸‍♀️',
+            'Unleash Your Potential with Pilates! 🤸'
         ],
         'yoga': [
             'Ready to Find Your Zen? 🧘‍♀️',
@@ -95,7 +116,17 @@ class EmailTemplateProvider:
             'Yoga: Where Mind, Body, and Spirit Unite 🧘‍♀️',
             'A Symphony of Serenity: Yoga 🧘',
             'Journey to the Heart of Yoga 🧘‍♂️',
-            'Tap into Timeless Yoga Traditions 🧘'
+            'Tap into Timeless Yoga Traditions 🧘',
+            'Yoga: Breathe into Bliss! 🧘‍♀️',
+            'Embrace the Flow of Yoga! 🧘',
+            'Yoga: Your Path to Tranquility! 🧘‍♂️',
+            'Stretch into Serenity with Yoga! 🧘',
+            'Harmonize Your Life with Yoga! 🧘‍♀️',
+            'Yoga: The Art of Balance and Peace! 🧘',
+            'Find Your Zen in Every Yoga Pose! 🧘‍♂️',
+            'Yoga: A Symphony of Soulful Stretches! 🧘',
+            'Transform with the Power of Yoga! 🧘‍♀️',
+            'Yoga: Uniting Mind, Body, and Spirit! 🧘'
 
         ],
         'shape': [
@@ -123,7 +154,17 @@ class EmailTemplateProvider:
             'Find Fitness in Every Form and Shape! 💪',
             'Reshape, Reimagine, Rekindle! 💪',
             'The Shape of Your Dreams is Within Reach! 💪',
-            'Unlock the Ultimate Shape Shift! 💪'
+            'Unlock the Ultimate Shape Shift! 💪',
+            'Shape Your Way to Greatness! 💪',
+            'Building the Best You: Get in Shape! 💪',
+            'Shape: Your Path to Peak Performance! 💪',
+            'Transform Your Body, Transform Your Life! 💪',
+            'Shape Success with Every Sweat! 💪',
+            'Crafting Confidence, One Shape at a Time! 💪',
+            'The Ultimate Shape-Up Challenge! 💪',
+            'Shape: Fitness, Fun, and Fulfillment! 💪',
+            'Define Your Destiny with Dynamic Shape! 💪',
+            'Shape Your Dreams into Reality! 💪'
         ],
         'health_exercise': [
             'Your Health. Your Move. Let\'s Go! 🏃‍♂️',
@@ -150,7 +191,17 @@ class EmailTemplateProvider:
             'Ignite Your Health Revolution! 🏃‍♂️',
             'Strive for Health Excellence! 🏃',
             'Sweat, Smile, Repeat: The Health Mantra! 🏃‍♂️',
-            'Journey to the Pinnacle of Health! 🏃'
+            'Journey to the Pinnacle of Health! 🏃',
+            'Take the Leap to Health and Vitality! 🏃‍♂️',
+            'Embrace the Energy of Exercise! 🏃',
+            'Health and Hustle: Your Winning Combo! 🏃‍♂️',
+            'Journey to Wellness with Every Step! 🏃',
+            'Energize, Exercise, Excel! 🏃‍♂️',
+            'Health in Motion: Move to Improve! 🏃',
+            'Chase Your Health Goals with Passion! 🏃‍♂️',
+            'Elevate Your Life with Exercise! 🏃',
+            'Commit to Fit: Health Awaits! 🏃‍♂️',
+            'Transform Your Health, One Step at a Time! 🏃'
         ],
         'dynamic_design': [
             'Designs That Move, Inspire, and Excite! 🎨',
@@ -177,7 +228,17 @@ class EmailTemplateProvider:
             'Turn Visions into Dynamic Visuals! 🎨',
             'Intricate Ideas, Dynamic Designs! 🎨',
             'The Dynamic Duo: Passion and Design! 🎨',
-            'Innovation in Every Dynamic Illustration! 🎨'
+            'Innovation in Every Dynamic Illustration! 🎨',
+            'Unleash Creativity with Dynamic Design! 🎨',
+            'Dynamic Design: Crafting Tomorrow Today! 🎨',
+            'Dare to Design Differently! 🎨',
+            'Shape Your Vision with Dynamic Design! 🎨',
+            'Innovate, Illustrate, Inspire! 🎨',
+            'Design Your Dreams into Reality! 🎨',
+            'Elevate Your Art with Dynamic Design! 🎨',
+            'Dynamic Design: Where Ideas Come Alive! 🎨',
+            'Crafting the Future with Every Design! 🎨',
+            'Break Boundaries, Build Beauty! 🎨'
         ],
         'feldenkrais': [
             'Discover Movement, Discover Yourself with Feldenkrais! 🚶‍♂️',
@@ -204,7 +265,17 @@ class EmailTemplateProvider:
             'Move, Morph, Master with Feldenkrais! 🚶',
             'Feldenkrais: The Frontier of Fitness! 🚶‍♂️',
             'Step into the Feldenkrais Finesse! 🚶',
-            'Journey Through the Rhythms of Feldenkrais! 🚶‍♂️'
+            'Journey Through the Rhythms of Feldenkrais! 🚶‍♂️',
+            'Feldenkrais: Move with Meaning! 🚶‍♂️',
+            'Unlock Your Body\'s Full Potential! 🚶',
+            'Find Fluidity with Feldenkrais! 🚶‍♂️',
+            'Feldenkrais: Your Journey to Joyful Movement! 🚶',
+            'Elevate Every Motion with Feldenkrais! 🚶‍♂️',
+            'Transform Through the Art of Movement! 🚶',
+            'Feldenkrais: The Key to Kinesthetic Grace! 🚶‍♂️',
+            'Discover the Dance of Life with Feldenkrais! 🚶',
+            'Feldenkrais: Crafting Elegant Movement! 🚶‍♂️',
+            'Embark on a Movement Revolution! 🚶',
         ],
         'bodypump': [
             'Pump It Up and Get Ripped! 🏋️‍♂️',
@@ -231,7 +302,17 @@ class EmailTemplateProvider:
             'Power Up with the BodyPump Beat! 🏋️‍♂️',
             'The BodyPump Blueprint to Brilliance! 🏋️',
             'Pump, Power, Perform! 🏋️‍♂️',
-            'The BodyPump Odyssey Awaits! 🏋️'
+            'The BodyPump Odyssey Awaits! 🏋️',
+            'BodyPump: Strength in Every Lift! 🏋️‍♂️',
+            'Pump Your Way to Peak Performance! 🏋️',
+            'Raise the Bar with BodyPump! 🏋️‍♂️',
+            'BodyPump: The Power to Transform! 🏋️',
+            'Lift, Tone, Conquer with BodyPump! 🏋️‍♂️',
+            'Unleash Your Strength with BodyPump! 🏋️',
+            'Pump Up Your Workout Routine! 🏋️‍♂️',
+            'BodyPump: Elevating Fitness to New Heights! 🏋️',
+            'Pump, Progress, Persevere! 🏋️‍♂️',
+            'Master the Art of BodyPump! 🏋️'
         ]
     }
 
@@ -355,6 +436,66 @@ class EmailTemplateProvider:
         },
         "lol_lobby": {
             "body": "<p>Step into the <b>{lesson_type}</b> LOL Lobby! 🏢 A space where smiles are the main service.</p><p>Linger in laughter! 😄</p>"
+        },
+        "euphoric_expedition": {
+            "body": "<p>Embark on an epic <b>{lesson_type}</b> Euphoric Expedition! 🚀 Journey through laughter and land in a world of joy.</p><p>Explore the extraordinary! 🌍</p>"
+        },
+        "giggly_grove": {
+            "body": "<p>Wander into the whimsical world of <b>{lesson_type}</b> Giggly Grove! 🌳 A forest filled with chuckles and cheer.</p><p>Embrace the enchantment! 🍄</p>"
+        },
+        "sunny_soiree": {
+            "body": "<p>Join the radiant rays at the <b>{lesson_type}</b> Sunny Soiree! ☀️ A celebration of smiles and sunshine.</p><p>Shine bright! 🌟</p>"
+        },
+        "fiesta_of_fun": {
+            "body": "<p>Step into the spirited <b>{lesson_type}</b> Fiesta of Fun! 🎉 A carnival of laughter and lively moments.</p><p>Dance with delight! 💃</p>"
+        },
+        "marvelous_meander": {
+            "body": "<p>Take a tranquil trek through <b>{lesson_type}</b> Marvelous Meander! 🚶‍♂️ A path paved with pleasant surprises and joy.</p><p>Stroll into serenity! 🌸</p>"
+        },
+        "jovial_journey": {
+            "body": "<p>Embark on the cheerful path of <b>{lesson_type}</b> Jovial Journey! 🌈 Travel through a spectrum of happiness and humor.</p><p>Travel towards joy! 🚌</p>"
+        },
+        "radiant_rendezvous": {
+            "body": "<p>Meet at the merry meeting point of <b>{lesson_type}</b> Radiant Rendezvous! 🎊 Where every moment is a burst of bliss.</p><p>Converge in cheer! 🤗</p>"
+        },
+        "bubbly_boulevard": {
+            "body": "<p>Stride down the sparkling streets of <b>{lesson_type}</b> Bubbly Boulevard! 🍾 A lane lined with laughter and lightness.</p><p>Walk with wonder! 🎈</p>"
+        },
+        "cheerful_carnival": {
+            "body": "<p>Step right up to the <b>{lesson_type}</b> Cheerful Carnival! 🎠 A whirlwind of wonders and whoops of joy.</p><p>Ride the rollercoaster of rapture! 🎢</p>"
+        },
+        "blissful_bay": {
+            "body": "<p>Sail into the serene seas of <b>{lesson_type}</b> Blissful Bay! 🌊 Where waves of happiness crash and calmness reigns.</p><p>Anchor in amusement! ⚓</p>"
+        },
+        "jolly_junction": {
+            "body": "<p>Gather at the gleeful crossroads of <b>{lesson_type}</b> Jolly Junction! 🚏 A hub of hilarity and heartwarming happiness.</p><p>Connect in comedy! 🤝</p>"
+        },
+        "mirthful_meadow": {
+            "body": "<p>Frolic in the fields of <b>{lesson_type}</b> Mirthful Meadow! 🌾 A landscape of laughs and light-hearted leaps.</p><p>Gallop into glee! 🐎</p>"
+        },
+        "happy_highlands": {
+            "body": "<p>Ascend the peaks of pleasure in <b>{lesson_type}</b> Happy Highlands! ⛰️ A highland haven of hilarity and high spirits.</p><p>Climb to contentment! 🧗‍♂️</p>"
+        },
+        "gleeful_gallery": {
+            "body": "<p>Peruse the paintings of joy in <b>{lesson_type}</b> Gleeful Gallery! 🎨 A museum of merriment and masterpieces of mirth.</p><p>View with vibrancy! 🖼️</p>"
+        },
+        "lively_lagoon": {
+            "body": "<p>Dive into the depths of delight at <b>{lesson_type}</b> Lively Lagoon! 🏊‍♀️ A pool of pleasure and a splash of splendor.</p><p>Swim in smiles! 🌊</p>"
+        },
+        "whimsical_wonderland": {
+            "body": "<p>Step through the looking glass into <b>{lesson_type}</b> Whimsical Wonderland! 🎩 A realm of ridiculousness and radiant reveries.</p><p>Discover the dreamy! 🌟</p>"
+        },
+        "hilarious_haven": {
+            "body": "<p>Retreat to the refuge of laughter at <b>{lesson_type}</b> Hilarious Haven! 🌴 An oasis of chuckles and a sanctuary of snickers.</p><p>Relax in rapture! 🛖</p>"
+        },
+        "joyful_jam": {
+            "body": "<p>Get in the groove at the <b>{lesson_type}</b> Joyful Jam! 🎸 A symphony of snickers and a chorus of cheer.</p><p>Strum the strings of spirit! 🎵</p>"
+        },
+        "beaming_bazaar": {
+            "body": "<p>Wander the wondrous aisles of <b>{lesson_type}</b> Beaming Bazaar! 🛍️ A marketplace of mirth and a treasure trove of titters.</p><p>Shop the smiles! 🏪</p>"
+        },
+        "vibrant_village": {
+            "body": "<p>Explore the energetic enclave of <b>{lesson_type}</b> Vibrant Village! 🏘️ A community of comedy and a carnival of joy.</p><p>Wander in wonder! 🎪</p>"
         }
     }
 

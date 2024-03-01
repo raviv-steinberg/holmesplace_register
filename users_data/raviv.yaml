@@ -8,5 +8,5 @@ notify_result: true
 notify_start_running: true
 user_schedule:
 - in_progress: false
-  lesson_id: '10015'
-  seats: 5 6
+  lesson_id: '10152'
+  seats: 38 46 45
