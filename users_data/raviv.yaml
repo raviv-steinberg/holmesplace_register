@@ -9,4 +9,7 @@ notify_start_running: true
 user_schedule:
 - in_progress: false
   lesson_id: '10152'
-  seats: 38 46 45
+  seats: 46 38 45
+- in_progress: false
+  lesson_id: '10125'
+  seats: 19

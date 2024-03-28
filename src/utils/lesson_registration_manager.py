@@ -200,7 +200,7 @@ class LessonRegistrationManager:
         except Exception:
             raise
 
-    def __wait_n_seconds_before_registration_start(self, seconds_before: int = 15) -> None:
+    def __wait_n_seconds_before_registration_start(self, seconds_before: int = 3) -> None:
         """
         Waits for a specified number of seconds before the lesson's registration start time.
         :param seconds_before: The number of seconds to wait before the lesson's registration starts. Default is 30 seconds.
@@ -287,7 +287,7 @@ class LessonRegistrationManager:
                 raise
             except requests.exceptions.HTTPError as ex:
                 self.logger.error(ex)
-                time.sleep(1)
+                time.sleep(2)
             except Exception as ex:
                 self.logger.error(ex)
         raise RegistrationTimeoutException(f'Failed to register for lesson \'{self.lesson["type"]}\'  within {timeout} minute(s).')
