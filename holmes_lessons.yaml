@@ -38,6 +38,13 @@ clubs:
         instructor_id: '351'
       - day: thursday
         type: pilates
+        start_time: '10:30'
+        registration_day: wednesday
+        registration_start_time: '10:30'
+        lesson_id: '10043'
+        instructor_id: '351'
+      - day: thursday
+        type: pilates
         start_time: '18:30'
         registration_day: thursday
         registration_start_time: '16:30'

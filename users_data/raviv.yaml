@@ -11,5 +11,5 @@ user_schedule:
   lesson_id: '10152'
   seats: 46 38 45
 - in_progress: false
-  lesson_id: '10125'
-  seats: 19
+  lesson_id: '10127'
+  seats: 19 17
