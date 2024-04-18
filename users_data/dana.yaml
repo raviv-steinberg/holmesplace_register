@@ -7,51 +7,87 @@ name: dana
 notify_result: true
 notify_start_running: true
 user_schedule:
-- in_progress: false
-  lesson_id: '10160'
-  seats: 5 8 6
-- in_progress: false
-  lesson_id: '10128'
-  seats: 5 8 6
-- in_progress: false
-  lesson_id: '10130'
-  seats: 5 8 6
-- in_progress: false
-  lesson_id: '10126'
-  seats: 5 8 6
-- in_progress: false
-  lesson_id: '10129'
-  seats: 5 8 6
-- in_progress: false
-  lesson_id: '10173'
-  seats: 3 2 1
-- in_progress: false
-  lesson_id: '10152'
-  seats: 3 2 1
-- in_progress: false
-  lesson_id: '10223'
-  seats: 3 2 1
-- in_progress: false
-  lesson_id: '10338'
-  seats: 3 2 1
-- in_progress: false
-  lesson_id: '10006'
-  seats: 5 8 6
-- in_progress: false
-  lesson_id: '10100'
-  seats: 3 2 1
-- in_progress: false
-  lesson_id: '10113'
-  seats: 3 2 1
-- in_progress: false
-  lesson_id: '10044'
-  seats: 3 2 1
-- in_progress: false
-  lesson_id: '10081'
-  seats: 3 2 1
-- in_progress: false
-  lesson_id: '10125'
-  seats: 12 11
-- in_progress: false
-  lesson_id: '10015'
-  seats: 3 2
+  # Spinning Lessons
+  # ------------------------------------------------------
+  # Lesson 10006: Spinning on Sunday at 19:30
+  - in_progress: false
+    lesson_id: '10136'
+    seats: 5 8 6
+  # Lesson 10128: Spinning on Wednesday at 8:15
+  - in_progress: false
+    lesson_id: '10128'
+    seats: 5 8 6
+  # Lesson 10129: Spinning on Friday at 9:45
+  - in_progress: false
+    lesson_id: '10129'
+    seats: 5 8 6
+  # Lesson 10160: Spinning on Thursday at 19:30
+  - in_progress: false
+    lesson_id: '10160'
+    seats: 5 8 6
+  # Lesson 10130: Spinning on Saturday at 10:00
+  - in_progress: false
+    lesson_id: '10130'
+    seats: 5 8 6
+  # Lesson 10126: Spinning on Saturday at 11:00
+  - in_progress: false
+    lesson_id: '10126'
+    seats: 5 8 6
+  # ------------------------------------------------------
+  # Yoga Lessons
+  # ------------------------------------------------------
+  # Lesson 10125: Yoga on Friday at 16:15
+  - in_progress: false
+    lesson_id: '10125'
+    seats: 12 11
+  # Lesson 10173: Yoga on Saturday at 9:15
+  - in_progress: false
+    lesson_id: '10173'
+    seats: 3 2 1
+  # ------------------------------------------------------
+  # Pilates Lessons
+  # ------------------------------------------------------
+  # Lesson 10044: Pilates on Tuesday at 16:15
+  - in_progress: false
+    lesson_id: '10044'
+    seats: 3 2 1
+  # Lesson 10015: Pilates on Friday at 8:30
+  - in_progress: false
+    lesson_id: '10015'
+    seats: 3 2
+  # Lesson 10152: Pilates on Saturday at 11:30
+  - in_progress: false
+    lesson_id: '10152'
+    seats: 3 2 1
+  # Lesson 10338: Pilates on Saturday at 11:30
+  - in_progress: false
+    lesson_id: '10338'
+    seats: 3 2 1
+  # ------------------------------------------------------
+  # Fitball Lessons
+  # ------------------------------------------------------
+  # Lesson 10223: Fitball on Sunday at 8:30
+  - in_progress: false
+    lesson_id: '10223'
+    seats: 3 2 1
+  # ------------------------------------------------------
+  # Shape Lesson
+  # ------------------------------------------------------
+  # Lesson 10100: Shape on Saturday at 9:30
+  - in_progress: false
+    lesson_id: '10100'
+    seats: 3 2 1
+  # ------------------------------------------------------
+  # Health Exercise Lessons
+  # ------------------------------------------------------
+  # Lesson 10081: Health Exercise on Tuesday at 17:15
+  - in_progress: false
+    lesson_id: '10081'
+    seats: 3 2 1
+  # Lesson 10113: Health Exercise on Saturday at 10:30
+  - in_progress: false
+    lesson_id: '10113'
+    seats: 3 2 1
+  # ------------------------------------------------------
+
+

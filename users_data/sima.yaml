@@ -7,42 +7,79 @@ name: sima
 notify_result: true
 notify_start_running: true
 user_schedule:
-- in_progress: false
-  lesson_id: '10152'
-  seats: 17 18
-- in_progress: false
-  lesson_id: '10223'
-  seats: 17 18
-- in_progress: false
-  lesson_id: '10161'
-  seats: 17 18
-- in_progress: false
-  lesson_id: '10099'
-  seats: 17 18
-- in_progress: false
-  lesson_id: '10025'
-  seats: 17 18
-- in_progress: false
-  lesson_id: '10015'
-  seats: 17 18
-- in_progress: false
-  lesson_id: '10100'
-  seats: 17 18
-- in_progress: false
-  lesson_id: '10113'
-  seats: 17 18
-- in_progress: false
-  lesson_id: '10051'
-  seats: 14 15
-- in_progress: false
-  lesson_id: '10049'
-  seats: 14 15
-- in_progress: false
-  lesson_id: '10044'
-  seats: 2 5
-- in_progress: false
-  lesson_id: '10081'
-  seats: 2 5
-- in_progress: false
-  lesson_id: '10125'
-  seats: 17 18
+  # Pilates Lessons
+  # ---------------------------------------
+  # Lesson 10152: Pilates on Sunday at 7:30
+  - in_progress: false
+    lesson_id: '10152'
+    seats: 17 18
+  # ---------------------------------------
+  # Lesson 10099: Pilates on Monday at 8:30
+  - in_progress: false
+    lesson_id: '10099'
+    seats: 17 18
+  # ---------------------------------------
+  # Lesson 10015: Pilates on Friday at 8:30
+  - in_progress: false
+    lesson_id: '10015'
+    seats: 17 18
+  # ---------------------------------------
+  # Lesson 10044: Pilates on Tuesday at 16:15
+  - in_progress: false
+    lesson_id: '10044'
+    seats: 2 5
+  # ---------------------------------------
+  # Fitball Lessons
+  # ---------------------------------------
+  # Lesson 10223: Fitball on Sunday at 8:30
+  - in_progress: false
+    lesson_id: '10223'
+    seats: 17 18
+  # ---------------------------------------
+  # Shape Lessons
+  # ---------------------------------------
+  # Lesson 10161: Shape on Monday at 7:30
+  - in_progress: false
+    lesson_id: '10161'
+    seats: 17 18
+  # ---------------------------------------
+  # Lesson 10100: Shape on Saturday at 9:30
+  - in_progress: false
+    lesson_id: '10100'
+    seats: 17 18
+  # ---------------------------------------
+  # Yoga Lessons
+  # ---------------------------------------
+  # Lesson 10025: Yoga on Wednesday at 8:30
+  - in_progress: false
+    lesson_id: '10025'
+    seats: 17 18
+  # ---------------------------------------
+  # Lesson 10051: Yoga on Tuesday at 8:30
+  - in_progress: false
+    lesson_id: '10051'
+    seats: 14 15
+  # ---------------------------------------
+  # Lesson 10049: Yoga on Thursday at 8:30
+  - in_progress: false
+    lesson_id: '10049'
+    seats: 14 15
+  # ---------------------------------------
+  # Lesson 10125: Yoga on Friday at 16:15
+  - in_progress: false
+    lesson_id: '10125'
+    seats: 17 18
+  # ---------------------------------------
+  # Health Exercise Lessons
+  # ---------------------------------------
+  # Lesson 10113: Health Exercise on Saturday at 10:30
+  - in_progress: false
+    lesson_id: '10113'
+    seats: 17 18
+  # ---------------------------------------
+  # Lesson 10081: Health Exercise on Tuesday at 17:15
+  - in_progress: false
+    lesson_id: '10081'
+    seats: 2 5
+  # ---------------------------------------
+
