@@ -38,7 +38,8 @@ class LessonRegistrationManager:
     It prioritizes user-preferred seats, but if they are occupied, it attempts to register the user on a random seat.
     """
 
-    def __init__(self, user_data_service: UserDataService, api: HolmesPlaceAPI, lesson: dict, seats: list[int], notifier: INotification = None):
+    def __init__(self, user_data_service: UserDataService, api: HolmesPlaceAPI, lesson: dict, seats: list[int],
+                 notifier: INotification = None):
         """
         Initializes the LessonRegistrationManager instance.
         :param user_data_service: user data.
@@ -83,10 +84,16 @@ class LessonRegistrationManager:
         :return: None
         """
         if self.user_data_service.notify_start_running:
-            self.logger.debug(msg=f'user\'s notify start running value is {self.user_data_service.notify_start_running}, Send an email')
-            SMTPService().send_email(to=self.user_data_service.email, subject=self.__get_email_start_running_subject(), body=self.__get_email_start_running_body())
+            self.logger.debug(
+                msg=f'user\'s notify start running value is {self.user_data_service.notify_start_running}, Send an email')
+            SMTPService().send_email(
+                to=self.user_data_service.email,
+                subject=self.__get_email_start_running_subject(),
+                body=self.__get_email_start_running_body())
         else:
-            self.logger.debug(msg=f'user\'s notify start_running value is {self.user_data_service.notify_start_running}, An email will not be sent')
+            self.logger.debug(
+                msg=f'user\'s notify start_running value is {self.user_data_service.notify_start_running}, '
+                    f'An email will not be sent')
 
         self.logger.info(self)
         self.__do_work()
@@ -116,7 +123,8 @@ class LessonRegistrationManager:
         self.logger.info(f'User \'{self.user_data_service.user}\' successfully logged out.')
 
     def __send_remainder(self, seat: int):
-        subject, body = EmailPreparerService().prepare_email(attendee_name=self.user_data_service.name, lesson=self.lesson, seat=seat)
+        subject, body = EmailPreparerService().prepare_email(attendee_name=self.user_data_service.name,
+                                                             lesson=self.lesson, seat=seat)
         SMTPService().send_email(to=self.user_data_service.email, subject=subject, body=body)
         # try:
         #     GoogleGmail().send_email(to=self.user_data_service.email, subject=subject, body=body)
@@ -152,14 +160,18 @@ class LessonRegistrationManager:
                 seat = self.__register()
             if seat:
                 if self.user_data_service.notify_result:
-                    self.logger.debug(msg=f'user\'s notify result value is {self.user_data_service.notify_result}, Send an email')
+                    self.logger.debug(
+                        msg=f'user\'s notify result value is {self.user_data_service.notify_result}, Send an email')
                     self.__send_remainder(seat=seat)
                 else:
-                    self.logger.debug(msg=f'user\'s notify result value is {self.user_data_service.notify_result}, An email will not be sent')
+                    self.logger.debug(
+                        msg=f'user\'s notify result value is {self.user_data_service.notify_result}, An email will not be sent')
                 return
         except (LessonNotFoundException, LessonNotOpenForRegistrationException, LessonTimeDoesNotExistException,
-                MultipleDevicesConnectionException, NoAvailableSeatsException, NoMatchingSubscriptionException, LessonCanceledException,
-                RegistrationForThisLessonAlreadyExistsException, RegistrationTimeoutException, UserPreferredSeatsOccupiedException) as ex:
+                MultipleDevicesConnectionException, NoAvailableSeatsException, NoMatchingSubscriptionException,
+                LessonCanceledException,
+                RegistrationForThisLessonAlreadyExistsException, RegistrationTimeoutException,
+                UserPreferredSeatsOccupiedException) as ex:
             self.logger.error(ex)
         except Exception as ex:
             self.logger.exception(ex)
@@ -206,7 +218,8 @@ class LessonRegistrationManager:
         :param seconds_before: The number of seconds to wait before the lesson's registration starts. Default is 30 seconds.
         :return: None
         """
-        self.logger.debug(msg=f'\'{self.lesson["type"]}\' registration start time: {self.lesson["registration_start_time"]}.')
+        self.logger.debug(
+            msg=f'\'{self.lesson["type"]}\' registration start time: {self.lesson["registration_start_time"]}.')
         target = DateUtils.get_target_time(time=self.lesson['registration_start_time'], seconds_before=seconds_before)
         self.logger.debug(msg=f'Pausing until {target} ({seconds_before} seconds before registration starts).')
         pause.until(time=target)
@@ -274,7 +287,8 @@ class LessonRegistrationManager:
         :return: None
         """
         end_time = time.time() + timeout * 60
-        self.logger.info(f'Waiting for \'{self.lesson["type"]}\' registration to start. Attempt to register for seat number {seat}.')
+        self.logger.info(
+            f'Waiting for \'{self.lesson["type"]}\' registration to start. Attempt to register for seat number {seat}.')
 
         while time.time() < end_time:
             try:
@@ -283,14 +297,18 @@ class LessonRegistrationManager:
             except LessonNotOpenForRegistrationException as ex:
                 self.logger.warning(ex)
                 time.sleep(1)
-            except (BikeOccupiedException, LessonTimeDoesNotExistException, RegistrationForThisLessonAlreadyExistsException, NoMatchingSubscriptionException, LessonCanceledException):
+            except (
+                    BikeOccupiedException, LessonTimeDoesNotExistException,
+                    RegistrationForThisLessonAlreadyExistsException,
+                    NoMatchingSubscriptionException, LessonCanceledException):
                 raise
             except requests.exceptions.HTTPError as ex:
                 self.logger.error(ex)
                 time.sleep(2)
             except Exception as ex:
                 self.logger.error(ex)
-        raise RegistrationTimeoutException(f'Failed to register for lesson \'{self.lesson["type"]}\'  within {timeout} minute(s).')
+        raise RegistrationTimeoutException(
+            f'Failed to register for lesson \'{self.lesson["type"]}\'  within {timeout} minute(s).')
 
     def __try_to_register_lesson(self, seat: int) -> bool:
         """
@@ -300,7 +318,8 @@ class LessonRegistrationManager:
         """
         try:
             self.api.register_lesson_with_seat(params=self.lesson, seat=seat)
-            self.logger.info(msg=f'Successfully registered for \'{self.lesson["type"]}\' lesson with seat number {seat}.')
+            self.logger.info(
+                msg=f'Successfully registered for \'{self.lesson["type"]}\' lesson with seat number {seat}.')
             return True
         except BikeOccupiedException as ex:
             self.logger.warning(ex)
@@ -362,7 +381,11 @@ class LessonRegistrationManager:
         Get subject of start running message.
         :return: String representation of stat running message.
         """
-        return f'{self.lesson["type"].upper()} lesson on {self.lesson["day"].upper()}, {self.lesson["date"]} at {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}'
+        preferred_seats = ', '.join(str(x) for x in self.seats)
+        return f'{self.lesson["type"].upper()} lesson' \
+               f' on {self.lesson["day"].upper()}, {self.lesson["date"]}' \
+               f' at {DateUtils.convert_time_format(time_str=self.lesson["start_time"])} <br>' \
+               f'Preferred seats: {preferred_seats}'
 
     @staticmethod
     def __check_exception_message(error_msg: str) -> None:
