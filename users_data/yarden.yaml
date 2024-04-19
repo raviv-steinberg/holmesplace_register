@@ -12,7 +12,7 @@ user_schedule:
   # Lesson 10152: Pilates on Sunday at 7:30
   - in_progress: false
     lesson_id: '10152'
-    seats: 46 38 45 4 2
+    seats: 4 2
   # ---------------------------------------
   # Lesson 10099: Pilates on Monday at 8:30
   - in_progress: false
