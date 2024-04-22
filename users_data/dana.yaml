@@ -34,8 +34,13 @@ user_schedule:
     lesson_id: '10126'
     seats: 5 8 6
   # ------------------------------------------------------
+
   # Yoga Lessons
   # ------------------------------------------------------
+  # Lesson 10049: Yoga on Thursday at 8:30
+  - in_progress: false
+    lesson_id: '10049'
+    seats: 3 2 1
   # Lesson 10125: Yoga on Friday at 16:15
   - in_progress: false
     lesson_id: '10125'
