@@ -49,7 +49,7 @@ clubs:
         registration_day: thursday
         registration_start_time: '16:30'
         lesson_id: '10366'
-        instructor_id: '351'—
+        instructor_id: '351'
       - day: friday
         type: pilates
         start_time: '8:30'
