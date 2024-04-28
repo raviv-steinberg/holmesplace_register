@@ -49,7 +49,7 @@ clubs:
         registration_day: thursday
         registration_start_time: '16:30'
         lesson_id: '10366'
-        instructor_id: '351'
+        instructor_id: '351'—
       - day: friday
         type: pilates
         start_time: '8:30'
@@ -191,13 +191,6 @@ clubs:
         registration_day: wednesday
         registration_start_time: '8:30'
         lesson_id: '10049'
-        instructor_id: '50'
-      - day: friday
-        type: yoga
-        start_time: '16:15'
-        registration_day: friday
-        registration_start_time: '14:15'
-        lesson_id: '10125'
         instructor_id: '50'
       - day: friday
         type: yoga
