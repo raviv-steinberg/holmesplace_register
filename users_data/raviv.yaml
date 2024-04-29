@@ -3,6 +3,7 @@ credentials:
   password: '12345678'
   user: 0547558333
 email: raviv.steinberg@gmail.com
+whatsapp_group_name: +972 54-7558333
 name: raviv
 notify_result: true
 notify_start_running: true
@@ -21,4 +22,3 @@ user_schedule:
     lesson_id: '10125'
     seats: 46 38 45
   # ---------------------------------------
-

@@ -26,6 +26,7 @@ class UserDataService:
         self._password = content.get('credentials')['password']
         self._name = content.get('name')
         self._email = content.get('email')
+        self._whatsapp_group_name = content.get('whatsapp_group_name')
         self._choices = content.get('user_schedule', [])
         self._notify_start_running = content.get('notify_start_running', None)
         self._notify_result = content.get('notify_result', None)
@@ -96,6 +97,23 @@ class UserDataService:
         """
         self._email = value
         self._update_user_data('email', value)
+
+    @property
+    def whatsapp_group_name(self) -> str:
+        """
+        Gets the Whatsapp group name from the user data.
+        :return: A string representing the Whatsapp group name.
+        """
+        return self._whatsapp_group_name
+
+    @whatsapp_group_name.setter
+    def whatsapp_group_name(self, value: str):
+        """
+        Sets the Whatsapp group name in the user data.
+        :param value: A string representing the Whatsapp group name.
+        """
+        self._whatsapp_group_name = value
+        self._update_user_data('whatsapp_group_name', value)
 
     @property
     def choices(self) -> list:

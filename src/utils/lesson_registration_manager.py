@@ -5,10 +5,11 @@ Date: 04/09/2023
 import json
 import random
 import time
-from datetime import datetime
 import pause
 import requests
 from src.common.holmes_place_api import HolmesPlaceAPI
+from src.enums.days_of_week import DaysOfWeek
+from src.enums.lesson_type import LessonType
 from src.exceptions.bike_occupied_exception import BikeOccupiedException
 from src.exceptions.lesson_canceled_exception import LessonCanceledException
 from src.exceptions.lesson_not_found_exception import LessonNotFoundException
@@ -22,11 +23,11 @@ from src.exceptions.registration_timeout_exception import RegistrationTimeoutExc
 from src.exceptions.user_preferred_seats_occupied_exception import UserPreferredSeatsOccupiedException
 from src.interfaces.inotification import INotification
 from src.services.email.email_preparer_service import EmailPreparerService
-from src.services.email.email_template_provider import EmailTemplateProvider
 # from src.services.google.google_calendar import GoogleCalendar
 # from src.services.google.google_gmail import GoogleGmail
 from src.services.smtp_service import SMTPService
 from src.services.user_data_service import UserDataService
+from src.services.whatsapp.whatsapp_service import WhatsappService
 from src.utils.date_utils import DateUtils
 from src.utils.logger_manager import LoggerManager
 
@@ -85,14 +86,17 @@ class LessonRegistrationManager:
         """
         if self.user_data_service.notify_start_running:
             self.logger.debug(
-                msg=f'user\'s notify start running value is {self.user_data_service.notify_start_running}, Send an email')
-            SMTPService().send_email(
-                to=self.user_data_service.email,
-                subject=self.__get_email_start_running_subject(),
-                body=self.__get_email_start_running_body())
+                msg=f'user\'s notify start running value is '
+                    f'{self.user_data_service.notify_start_running}, '
+                    f'Send an email')
+            # SMTPService().send_email(
+            #     to=self.user_data_service.email,
+            #     subject=self.__get_email_start_running_subject(),
+            #     body=self.__get_email_start_running_body())
         else:
             self.logger.debug(
-                msg=f'user\'s notify start_running value is {self.user_data_service.notify_start_running}, '
+                msg=f'user\'s notify start_running value is '
+                    f'{self.user_data_service.notify_start_running}, '
                     f'An email will not be sent')
 
         self.logger.info(self)
@@ -126,6 +130,24 @@ class LessonRegistrationManager:
         subject, body = EmailPreparerService().prepare_email(attendee_name=self.user_data_service.name,
                                                              lesson=self.lesson, seat=seat)
         SMTPService().send_email(to=self.user_data_service.email, subject=subject, body=body)
+
+        # Send whatsapp message.
+        if self.user_data_service.whatsapp_group_name:
+            messages = [
+                f'הרישום לשיעור {LessonType.get_hebrew_name(english_name=self.lesson["type"].upper())} בוצע בהצלחה! 🎉',
+                f'',
+                f'פרטי השיעור:',
+                f'יום: {DaysOfWeek.get_hebrew_day(self.lesson["day"].upper())}',
+                f'תאריך: {"/".join(self.lesson["date"].split("/")[::-1])}',
+                f'שעה: {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}',
+                f'מקום מספר: *{seat}*',
+                f'',
+                'נשמח לראותך בשיעור! 💪']
+
+            WhatsappService.send_message(
+                contact_name=self.user_data_service.whatsapp_group_name,
+                message='\n'.join(messages))
+
         # try:
         #     GoogleGmail().send_email(to=self.user_data_service.email, subject=subject, body=body)
         # except Exception as ex:
