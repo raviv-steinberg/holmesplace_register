@@ -2,6 +2,7 @@
 Author: raviv steinberg
 Date: 09/09/2023
 """
+import sys
 import argparse
 from src.services.user_data_service import UserDataService
 from src.utils.lesson_registration_manager_factory import LessonRegistrationManagerFactory
@@ -28,4 +29,7 @@ if __name__ == "__main__":
     parser.add_argument('--user_data_file', '-f', type=str, required=True, help='User YAML data file')
     args = parser.parse_args()
     lesson_registration_manager = LessonRegistrationManagerFactory(user_data_service=UserDataService(filepath=args.user_data_file), lesson_id=args.lesson_id).get()
-    lesson_registration_manager.register_lesson()
+    res = lesson_registration_manager.register_lesson()
+    sys.stdout.write(f'RUNNING RESULT: {res}')
+    sys.stdout.flush()
+    sys.exit(0)
