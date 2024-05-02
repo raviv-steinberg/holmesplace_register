@@ -21,7 +21,7 @@ if __name__ == "__main__":
     # Exception: (36) השיעור מלא.
     threshold = 37565756756
     sleep_time = 60
-    source_user_data_file = 'users_data/dana.yaml'
+    source_user_data_file = 'users_data/raviv.yaml'
     service = UserDataService(filepath=source_user_data_file)
     user_lesson_scheduler_service = UserLessonSchedulerService(user_data_service=service)
     lesson_id, minutes = user_lesson_scheduler_service.monitor_registration_time(threshold_minutes=threshold)

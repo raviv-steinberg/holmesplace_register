@@ -194,6 +194,13 @@ clubs:
         instructor_id: '50'
       - day: friday
         type: yoga
+        start_time: '10:00'
+        registration_day: thursday
+        registration_start_time: '10:00'
+        lesson_id: '10027'
+        instructor_id: '50'
+      - day: friday
+        type: yoga
         start_time: '16:15'
         registration_day: friday
         registration_start_time: '14:15'
@@ -245,10 +252,10 @@ clubs:
         instructor_id: '50'
       - day: tuesday
         type: health_exercise
-        start_time: '10:00'
+        start_time: '9:30'
         registration_day: monday
-        registration_start_time: '10:00'
-        lesson_id: '10014'
+        registration_start_time: '9:30'
+        lesson_id: '10435'
         instructor_id: '50'
       - day: tuesday
         type: health_exercise
@@ -299,6 +306,13 @@ clubs:
         registration_day: monday
         registration_start_time: '17:15'
         lesson_id: '10019'
+        instructor_id: '27'
+      - day: wednesday
+        type: feldenkrais
+        start_time: '10:15'
+        registration_day: tuesday
+        registration_start_time: '10:15'
+        lesson_id: '10020'
         instructor_id: '27'
       -  day: thursday
          type: feldenkrais

@@ -89,10 +89,10 @@ class LessonRegistrationManager:
                 msg=f'user\'s notify start running value is '
                     f'{self.user_data_service.notify_start_running}, '
                     f'Send an email')
-            # SMTPService().send_email(
-            #     to=self.user_data_service.email,
-            #     subject=self.__get_email_start_running_subject(),
-            #     body=self.__get_email_start_running_body())
+            SMTPService().send_email(
+                to=self.user_data_service.email,
+                subject=self.__get_email_start_running_subject(),
+                body=self.__get_email_start_running_body())
         else:
             self.logger.debug(
                 msg=f'user\'s notify start_running value is '
@@ -132,7 +132,9 @@ class LessonRegistrationManager:
         SMTPService().send_email(to=self.user_data_service.email, subject=subject, body=body)
 
         # Send whatsapp message.
+        self.logger.debug(msg=f'User whatsapp_group_name: {self.user_data_service.whatsapp_group_name}')
         if self.user_data_service.whatsapp_group_name:
+            self.logger.info(msg=f'Notify running by Whatsapp to {self.user_data_service.whatsapp_group_name}')
             messages = [
                 f'הרישום לשיעור {LessonType.get_hebrew_name(english_name=self.lesson["type"].upper())} בוצע בהצלחה! 🎉',
                 f'',
@@ -144,7 +146,7 @@ class LessonRegistrationManager:
                 f'',
                 'נשמח לראותך בשיעור! 💪']
 
-            WhatsappService.send_message(
+            WhatsappService(logger=self.logger).send_message(
                 contact_name=self.user_data_service.whatsapp_group_name,
                 message='\n'.join(messages))
 
