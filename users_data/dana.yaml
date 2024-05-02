@@ -3,6 +3,7 @@ credentials:
   password: dana1234
   user: '0527206014'
 email: dana.kagan@gmail.com
+whatsapp_group_name: mishka's robot
 name: dana
 notify_result: true
 notify_start_running: true
