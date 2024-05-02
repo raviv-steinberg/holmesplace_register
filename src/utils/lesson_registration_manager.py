@@ -79,7 +79,7 @@ class LessonRegistrationManager:
         if not seats:
             raise ValueError('[LessonRegistrationManager] - Invalid seats.')
 
-    def register_lesson(self) -> None:
+    def register_lesson(self) -> str:
         """
         Registers the user for the specified lesson by either priority or random seat choice.
         :return: None
@@ -100,7 +100,7 @@ class LessonRegistrationManager:
                     f'An email will not be sent')
 
         self.logger.info(self)
-        self.__do_work()
+        return str(self.__do_work())
 
     def login(self):
         """
@@ -127,43 +127,47 @@ class LessonRegistrationManager:
         self.logger.info(f'User \'{self.user_data_service.user}\' successfully logged out.')
 
     def __send_remainder(self, seat: int):
-        subject, body = EmailPreparerService().prepare_email(attendee_name=self.user_data_service.name,
-                                                             lesson=self.lesson, seat=seat)
-        SMTPService().send_email(to=self.user_data_service.email, subject=subject, body=body)
+        try:
+            subject, body = EmailPreparerService().prepare_email(attendee_name=self.user_data_service.name,
+                                                                 lesson=self.lesson, seat=seat)
+            SMTPService().send_email(to=self.user_data_service.email, subject=subject, body=body)
 
-        # Send whatsapp message.
-        self.logger.debug(msg=f'User whatsapp_group_name: {self.user_data_service.whatsapp_group_name}')
-        if self.user_data_service.whatsapp_group_name:
-            self.logger.info(msg=f'Notify running by Whatsapp to {self.user_data_service.whatsapp_group_name}')
-            messages = [
-                f'הרישום לשיעור {LessonType.get_hebrew_name(english_name=self.lesson["type"].upper())} בוצע בהצלחה! 🎉',
-                f'',
-                f'פרטי השיעור:',
-                f'יום: {DaysOfWeek.get_hebrew_day(self.lesson["day"].upper())}',
-                f'תאריך: {"/".join(self.lesson["date"].split("/")[::-1])}',
-                f'שעה: {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}',
-                f'מקום מספר: *{seat}*',
-                f'',
-                'נשמח לראותך בשיעור! 💪']
+            # Send whatsapp message.
+            self.logger.debug(msg=f'User whatsapp_group_name: {self.user_data_service.whatsapp_group_name}')
+            if self.user_data_service.whatsapp_group_name:
+                self.logger.info(msg=f'Notify running by Whatsapp to {self.user_data_service.whatsapp_group_name}')
+                messages = [
+                    f'הרישום לשיעור {LessonType.get_hebrew_name(english_name=self.lesson["type"].upper())} בוצע בהצלחה! 🎉',
+                    f'',
+                    f'פרטי השיעור:',
+                    f'יום: {DaysOfWeek.get_hebrew_day(self.lesson["day"].upper())}',
+                    f'תאריך: {"/".join(self.lesson["date"].split("/")[::-1])}',
+                    f'שעה: {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}',
+                    f'מקום מספר: *{seat}*',
+                    f'',
+                    'נשמח לראותך בשיעור! 💪']
 
-            WhatsappService(logger=self.logger).send_message(
-                contact_name=self.user_data_service.whatsapp_group_name,
-                message='\n'.join(messages))
+                WhatsappService(logger=self.logger).send_message(
+                    contact_name=self.user_data_service.whatsapp_group_name,
+                    message='\n'.join(messages))
 
-        # try:
-        #     GoogleGmail().send_email(to=self.user_data_service.email, subject=subject, body=body)
-        # except Exception as ex:
-        #     self.logger.error(ex)
-        #     SMTPService().send_email(to=self.user_data_service.email, subject=subject, body=body)
-        # try:
-        #     GoogleCalendar().create_event(
-        #         start_time=datetime.strptime(f'{self.lesson["date"]} {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}', '%Y/%m/%d %H:%M'),
-        #         summary=f'{self.lesson["type"].upper()} at {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}, seat number {seat}',
-        #         description='',
-        #         duration=60,
-        #         attendees=[self.user_data_service.email])
-        # except Exception as ex:
-        #     self.logger.error(ex)
+            # try:
+            #     GoogleGmail().send_email(to=self.user_data_service.email, subject=subject, body=body)
+            # except Exception as ex:
+            #     self.logger.error(ex)
+            #     SMTPService().send_email(to=self.user_data_service.email, subject=subject, body=body)
+            # try:
+            #     GoogleCalendar().create_event(
+            #         start_time=datetime.strptime(f'{self.lesson["date"]} {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}', '%Y/%m/%d %H:%M'),
+            #         summary=f'{self.lesson["type"].upper()} at {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}, seat number {seat}',
+            #         description='',
+            #         duration=60,
+            #         attendees=[self.user_data_service.email])
+            # except Exception as ex:
+            #     self.logger.error(ex)
+        except Exception as ex:
+            self.logger.exception(ex)
+
 
     def __do_work(self):
         """
@@ -190,13 +194,14 @@ class LessonRegistrationManager:
                 else:
                     self.logger.debug(
                         msg=f'user\'s notify result value is {self.user_data_service.notify_result}, An email will not be sent')
-                return
+                return seat
         except (LessonNotFoundException, LessonNotOpenForRegistrationException, LessonTimeDoesNotExistException,
                 MultipleDevicesConnectionException, NoAvailableSeatsException, NoMatchingSubscriptionException,
                 LessonCanceledException,
                 RegistrationForThisLessonAlreadyExistsException, RegistrationTimeoutException,
                 UserPreferredSeatsOccupiedException) as ex:
             self.logger.error(ex)
+            return ex
         except Exception as ex:
             self.logger.exception(ex)
         finally:
@@ -303,7 +308,7 @@ class LessonRegistrationManager:
             available_seats = self.__extract_available_seats()
         raise Exception('Failed to register for the lesson.')
 
-    def __wait_until_registration_starts(self, seat: int, timeout: int = 5) -> None:
+    def __wait_until_registration_starts(self, seat: int, timeout: int = 3) -> None:
         """
         Waits until the lesson registration begins.
         :param seat: int: The seat number to register with.
