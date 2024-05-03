@@ -240,7 +240,7 @@ clubs:
         start_time: '9:30'
         registration_day: friday
         registration_start_time: '9:30'
-        lesson_id: '10100'
+        lesson_id: '10454'
         instructor_id: '27'
     health_exercise:
       - day: monday
