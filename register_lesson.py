@@ -4,7 +4,7 @@ Date: 09/09/2023
 """
 import sys
 import argparse
-from src.services.user_data_service import UserDataService
+from src.services.user_data_factory import UserDataFactory
 from src.utils.lesson_registration_manager_factory import LessonRegistrationManagerFactory
 
 if __name__ == "__main__":
@@ -25,11 +25,15 @@ if __name__ == "__main__":
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument('--lesson-id', '-l', type=str, required=True, help='Lesson id that the user wats to register to')
-    parser.add_argument('--user_data_file', '-f', type=str, required=True, help='User YAML data file')
+    parser.add_argument('--lesson-id', '-l', type=str, required=True,
+                        help='Lesson id that the user wats to register to')
+    parser.add_argument('--username', '-u', type=str, required=True, help='Username')
     args = parser.parse_args()
-    lesson_registration_manager = LessonRegistrationManagerFactory(user_data_service=UserDataService(filepath=args.user_data_file), lesson_id=args.lesson_id).get()
-    res = lesson_registration_manager.register_lesson()
-    sys.stdout.write(f'RUNNING RESULT: {res}')
+    lesson_registration_manager = LessonRegistrationManagerFactory(
+        user_data_service=UserDataFactory.get_user_data_service(username=args.username),
+        lesson_id=args.lesson_id).get()
+
+    result = lesson_registration_manager.register_lesson()
+    sys.stdout.write(f'RUNNING RESULT: {result}')
     sys.stdout.flush()
     sys.exit(0)

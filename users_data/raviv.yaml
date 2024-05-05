@@ -4,20 +4,10 @@ credentials:
   user: 0547558333
 email: raviv.steinberg@gmail.com
 name: raviv
-notify_result: true
-notify_start_running: true
+notify_result: false
+notify_start_running: false
 user_schedule:
-  # Pilates Lessons
-  # ---------------------------------------
-  # Lesson 10152: Pilates on Sunday at 7:30
-  - in_progress: false
-    lesson_id: '10152'
-    seats: 46 38 45
-  # ---------------------------------------
-  # Yoga Lessons
-  # ---------------------------------------
-  # Lesson 10125: Yoga on Friday at 16:15
-  - in_progress: false
-    lesson_id: '10125'
-    seats: 46 38 45
-  # ---------------------------------------
+- in_progress: false
+  lesson_id: '10223'
+  seats: 46 38 45
+whatsapp_group_name: +972 54-755-8333

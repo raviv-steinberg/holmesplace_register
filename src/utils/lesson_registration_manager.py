@@ -168,8 +168,7 @@ class LessonRegistrationManager:
         except Exception as ex:
             self.logger.exception(ex)
 
-
-    def __do_work(self):
+    def __do_work(self) -> tuple:
         """
         Handles the process of user registration for a lesson. This includes:
         - Logging in.
@@ -194,14 +193,25 @@ class LessonRegistrationManager:
                 else:
                     self.logger.debug(
                         msg=f'user\'s notify result value is {self.user_data_service.notify_result}, An email will not be sent')
-                return seat
+
+                return True, \
+                    {"lesson_type": LessonType.get_hebrew_name(english_name=self.lesson["type"].upper()),
+                     "day": DaysOfWeek.get_hebrew_day(self.lesson["day"].upper()),
+                     "date": "/".join(self.lesson["date"].split("/")[::-1]),
+                     "time": DateUtils.convert_time_format(time_str=self.lesson["start_time"]),
+                     "seat": seat}
         except (LessonNotFoundException, LessonNotOpenForRegistrationException, LessonTimeDoesNotExistException,
                 MultipleDevicesConnectionException, NoAvailableSeatsException, NoMatchingSubscriptionException,
                 LessonCanceledException,
                 RegistrationForThisLessonAlreadyExistsException, RegistrationTimeoutException,
                 UserPreferredSeatsOccupiedException) as ex:
             self.logger.error(ex)
-            return ex
+            return False, \
+                {"lesson_type": LessonType.get_hebrew_name(english_name=self.lesson["type"].upper()),
+                 "day": DaysOfWeek.get_hebrew_day(self.lesson["day"].upper()),
+                 "date": "/".join(self.lesson["date"].split("/")[::-1]),
+                 "time": DateUtils.convert_time_format(time_str=self.lesson["start_time"]),
+                 "reason": str(ex)}
         except Exception as ex:
             self.logger.exception(ex)
         finally:
@@ -251,7 +261,7 @@ class LessonRegistrationManager:
             msg=f'\'{self.lesson["type"]}\' registration start time: {self.lesson["registration_start_time"]}.')
         target = DateUtils.get_target_time(time=self.lesson['registration_start_time'], seconds_before=seconds_before)
         self.logger.debug(msg=f'Pausing until {target} ({seconds_before} seconds before registration starts).')
-        pause.until(time=target)
+        # pause.until(time=target)
         self.logger.debug(msg=f'Resumed execution. Current time: {DateUtils.current_time()}')
 
     def __register(self) -> int:
@@ -287,8 +297,8 @@ class LessonRegistrationManager:
         return seat
 
     def __initialize_logger_manager(self):
-        # Initialize the LoggerManager for this instance
-        logger_manager = LoggerManager(user=self.user_data_service.user)
+        # Initialize the LoggerManager for this instance.
+        logger_manager = LoggerManager(user=self.user_data_service.name)
         self.logger = logger_manager.logger
 
     def __register_by_random(self) -> int:
@@ -308,7 +318,7 @@ class LessonRegistrationManager:
             available_seats = self.__extract_available_seats()
         raise Exception('Failed to register for the lesson.')
 
-    def __wait_until_registration_starts(self, seat: int, timeout: int = 3) -> None:
+    def __wait_until_registration_starts(self, seat: int, timeout: int = 0.1) -> None:
         """
         Waits until the lesson registration begins.
         :param seat: int: The seat number to register with.

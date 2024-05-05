@@ -50,7 +50,9 @@ class UserLessonSchedulerService:
                     if lesson['lesson_id'] == lesson_id:
                         reg_day = lesson['registration_day']
                         reg_time = datetime.strptime(lesson['registration_start_time'], '%H:%M').time()
-                        time_until_reg = self.__calculate_time_until(registration_day=reg_day, registration_time=reg_time)
+                        time_until_reg = self.__calculate_time_until(
+                            registration_day=reg_day,
+                            registration_time=reg_time)
                         upcoming_lessons.append((lesson_id, time_until_reg))
                         break
         return upcoming_lessons
@@ -60,11 +62,14 @@ class UserLessonSchedulerService:
         Continuously monitors the closest lesson registration time.
         Whenever a lesson's registration time is found to be a specific number
          of minutes away (default 3 minutes), it returns that lesson's ID.
-        :param threshold_minutes: The number of minutes away from registration to trigger an alert and return the lesson ID.
+        :param threshold_minutes: The number of minutes away from
+         registration to trigger an alert and return the lesson ID.
         :return: A tuple containing the lesson's ID and the time remaining until registration (in minutes).
         Returns (None, None) if no lesson meets the criteria.
         """
-        return next((lesson_tuple for lesson_tuple in self.get_upcoming_lessons() if lesson_tuple[1] <= threshold_minutes), (None, None))
+        return next(
+            (lesson_tuple for lesson_tuple in self.get_upcoming_lessons() if lesson_tuple[1] <= threshold_minutes),
+            (None, None))
 
     def __calculate_time_until(self, registration_day: str, registration_time: time) -> float:
         """
@@ -81,7 +86,8 @@ class UserLessonSchedulerService:
         target_datetime = now + timedelta(days=days_difference)
 
         # Combine the target date with the registration time.
-        target_datetime = target_datetime.replace(hour=registration_time.hour, minute=registration_time.minute, second=0, microsecond=0)
+        target_datetime = target_datetime.replace(hour=registration_time.hour, minute=registration_time.minute,
+                                                  second=0, microsecond=0)
 
         # The target time has already passed for this week; calculate for next week.
         if target_datetime < now:
@@ -90,4 +96,3 @@ class UserLessonSchedulerService:
         # Return difference in minutes.
         time_diff = target_datetime - now
         return time_diff.total_seconds() / 60
-
