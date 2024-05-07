@@ -265,7 +265,7 @@ clubs:
         lesson_id: '10342'
         instructor_id: '50'
       - day: tuesday
-        type: pilates
+        type: health_exercise
         start_time: '17:15'
         registration_day: tuesday
         registration_start_time: '15:15'
