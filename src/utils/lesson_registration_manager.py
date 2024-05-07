@@ -133,23 +133,23 @@ class LessonRegistrationManager:
             SMTPService().send_email(to=self.user_data_service.email, subject=subject, body=body)
 
             # Send whatsapp message.
-            self.logger.debug(msg=f'User whatsapp_group_name: {self.user_data_service.whatsapp_group_name}')
-            if self.user_data_service.whatsapp_group_name:
-                self.logger.info(msg=f'Notify running by Whatsapp to {self.user_data_service.whatsapp_group_name}')
-                messages = [
-                    f'הרישום לשיעור {LessonType.get_hebrew_name(english_name=self.lesson["type"].upper())} בוצע בהצלחה! 🎉',
-                    f'',
-                    f'פרטי השיעור:',
-                    f'יום: {DaysOfWeek.get_hebrew_day(self.lesson["day"].upper())}',
-                    f'תאריך: {"/".join(self.lesson["date"].split("/")[::-1])}',
-                    f'שעה: {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}',
-                    f'מקום מספר: *{seat}*',
-                    f'',
-                    'נשמח לראותך בשיעור! 💪']
-
-                WhatsappService(logger=self.logger).send_message(
-                    contact_name=self.user_data_service.whatsapp_group_name,
-                    message='\n'.join(messages))
+            # self.logger.debug(msg=f'User whatsapp_group_name: {self.user_data_service.whatsapp_group_name}')
+            # if self.user_data_service.whatsapp_group_name:
+            #     self.logger.info(msg=f'Notify running by Whatsapp to {self.user_data_service.whatsapp_group_name}')
+            #     messages = [
+            #         f'הרישום לשיעור {LessonType.get_hebrew_name(english_name=self.lesson["type"].upper())} בוצע בהצלחה! 🎉',
+            #         f'',
+            #         f'פרטי השיעור:',
+            #         f'יום: {DaysOfWeek.get_hebrew_day(self.lesson["day"].upper())}',
+            #         f'תאריך: {"/".join(self.lesson["date"].split("/")[::-1])}',
+            #         f'שעה: {DateUtils.convert_time_format(time_str=self.lesson["start_time"])}',
+            #         f'מקום מספר: *{seat}*',
+            #         f'',
+            #         'נשמח לראותך בשיעור! 💪']
+            #
+            #     WhatsappService(logger=self.logger).send_message(
+            #         contact_name=self.user_data_service.whatsapp_group_name,
+            #         message='\n'.join(messages))
 
             # try:
             #     GoogleGmail().send_email(to=self.user_data_service.email, subject=subject, body=body)
@@ -230,8 +230,8 @@ class LessonRegistrationManager:
         """
         self.login()
         self.user_data_service.set_registration_progress(lesson_id=self.lesson['lesson_id'], in_progress=True)
-        self.__wait_n_seconds_before_registration_start()
         self.logger.info(f'lesson details: {self.lesson}')
+        self.__wait_n_seconds_before_registration_start()
         self.logger.info(msg=f'User\'s preferred seats: {self.seats}')
 
     def __wait_before_registration_start(self) -> int:
@@ -260,9 +260,9 @@ class LessonRegistrationManager:
         self.logger.debug(
             msg=f'\'{self.lesson["type"]}\' registration start time: {self.lesson["registration_start_time"]}.')
         target = DateUtils.get_target_time(time=self.lesson['registration_start_time'], seconds_before=seconds_before)
-        self.logger.debug(msg=f'Pausing until {target} ({seconds_before} seconds before registration starts).')
-        # pause.until(time=target)
-        self.logger.debug(msg=f'Resumed execution. Current time: {DateUtils.current_time()}')
+        self.logger.info(msg=f'Pausing until {target} ({seconds_before} seconds before registration starts).')
+        pause.until(time=target)
+        self.logger.info(msg=f'Resumed execution. Current time: {DateUtils.current_time()}')
 
     def __register(self) -> int:
         """
@@ -295,6 +295,9 @@ class LessonRegistrationManager:
             seat = self.__choose_random_seat(available_seats)
             self.logger.debug(f'Attempting registration with seat number: {seat}.')
         return seat
+        # seat = self.seats.pop(0)
+        # self.logger.info(f'Attempting registration with seat number: {seat}.')
+        # return seat
 
     def __initialize_logger_manager(self):
         # Initialize the LoggerManager for this instance.
@@ -318,7 +321,7 @@ class LessonRegistrationManager:
             available_seats = self.__extract_available_seats()
         raise Exception('Failed to register for the lesson.')
 
-    def __wait_until_registration_starts(self, seat: int, timeout: int = 0.1) -> None:
+    def __wait_until_registration_starts(self, seat: int, timeout: int = 3) -> None:
         """
         Waits until the lesson registration begins.
         :param seat: int: The seat number to register with.

@@ -53,7 +53,7 @@ class LoggerManager(metaclass=SingletonMeta):
         }
 
         dictConfig(config)
-        coloredlogs.install(logger=self.logger, level='DEBUG')
+        coloredlogs.install(logger=self.logger, level='INFO')
         self._initialized = True
 
     def __create_directory_structure(self) -> str:

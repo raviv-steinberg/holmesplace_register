@@ -17,6 +17,8 @@ from src.services.selenium.webdriver_factory import WebDriverFactory
 search_field = (By.XPATH, "//p[@class='selectable-text copyable-text x15bjb6t x1n2onr6']")
 message_textbox = (By.XPATH, "//p[@class='selectable-text copyable-text x15bjb6t x1n2onr6']")
 send_button = (By.XPATH, "//span[@data-icon='send']")
+clear_search_button = (By.XPATH, "//span[@data-icon='x-alt']")
+search_button = (By.XPATH, "//span[@data-icon='search']")
 url = 'https://web.whatsapp.com/'
 
 
@@ -31,6 +33,8 @@ class WhatsappService:
         element = self.web_actions.find_element_with_condition(ec.element_to_be_clickable(search_field))
         time.sleep(0.3)
         element.click()
+        # element.clear()
+        time.sleep(0.3)
         element.send_keys(contact_name)
         time.sleep(0.3)
         # self.logger.debug(msg=f'Search for contact {contact_name}')
