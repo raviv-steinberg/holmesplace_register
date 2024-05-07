@@ -183,11 +183,12 @@ class UserDataService:
         # Default to False if lesson_id is not found.
         return False
 
-    def set_registration_progress(self, lesson_id: str, in_progress: bool):
+    def set_registration_progress(self, lesson_id: str, in_progress: bool) -> None:
         """
         Sets the registration progress status of a given lesson.
         :param lesson_id: ID of the lesson whose registration progress needs to be set.
         :param in_progress: A boolean indicating if the registration is in progress.
+        :return: None.
         """
         for lesson in self._choices:
             if lesson['lesson_id'] == lesson_id:
