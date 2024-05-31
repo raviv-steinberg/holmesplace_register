@@ -17,9 +17,6 @@ user_schedule:
   lesson_id: '10015'
   seats: 17 18
 - in_progress: false
-  lesson_id: '10044'
-  seats: 2 5
-- in_progress: false
   lesson_id: '10223'
   seats: 17 18
 - in_progress: false
@@ -39,13 +36,13 @@ user_schedule:
   seats: 14 15
 - in_progress: false
   lesson_id: '10125'
-  seats: 17 18
+  seats: 22 17 18
 - in_progress: false
   lesson_id: '10113'
   seats: 17 18
 - in_progress: false
-  lesson_id: '10081'
-  seats: 2 5
-- in_progress: false
   lesson_id: '10027'
+  seats: 17 18
+- in_progress: false
+  lesson_id: '10454'
   seats: 17 18

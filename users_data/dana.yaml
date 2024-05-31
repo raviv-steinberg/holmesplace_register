@@ -3,7 +3,6 @@ credentials:
   password: dana1234
   user: '0527206014'
 email: dana.kagan@gmail.com
-whatsapp_group_name: mishka's robot
 name: dana
 notify_result: true
 notify_start_running: true
@@ -22,9 +21,6 @@ user_schedule:
   seats: 5 8 6
 - in_progress: false
   lesson_id: '10130'
-  seats: 5 8 6
-- in_progress: false
-  lesson_id: '10126'
   seats: 5 8 6
 - in_progress: false
   lesson_id: '10049'
@@ -62,3 +58,4 @@ user_schedule:
 - in_progress: false
   lesson_id: '10020'
   seats: 3 2 1
+whatsapp_group_name: mishka's lesson announcements

@@ -168,7 +168,6 @@ class LessonRegistrationManager:
         except Exception as ex:
             self.logger.exception(ex)
 
-
     def __do_work(self):
         """
         Handles the process of user registration for a lesson. This includes:
@@ -241,7 +240,7 @@ class LessonRegistrationManager:
         except Exception:
             raise
 
-    def __wait_n_seconds_before_registration_start(self, seconds_before: int = 3) -> None:
+    def __wait_n_seconds_before_registration_start(self, seconds_before: int = 2) -> None:
         """
         Waits for a specified number of seconds before the lesson's registration start time.
         :param seconds_before: The number of seconds to wait before the lesson's registration starts. Default is 30 seconds.
@@ -359,7 +358,7 @@ class LessonRegistrationManager:
     def __extract_available_seats(self, retries: int = 5, delay: int = 1) -> list[int]:
         """
         Extracts available seat numbers from the given API response.
-        :param retries: int: Number of retries in case of failure. Default is 3.
+        :param retries: int: Number of retries in case of failure. Default is 5.
         :param delay: int: Delay between retries in seconds. Default is 1 second.
         :return: list[int]: A list of available seat numbers.
         """
@@ -369,20 +368,22 @@ class LessonRegistrationManager:
             try:
                 response = self.api.get_available_seats(params=self.lesson)
                 data = response.json()
-                if data.get("success"):
-                    available_seats = [int(seat) for seat in json.loads(data.get("availableSeats", "[]"))]
+                if data.get('success'):
+                    available_seats = [int(seat) for seat in json.loads(data.get('availableSeats', '[]'))]
                     if not available_seats:
-                        self.logger.error("No available seats retrieved from the response.")
+                        self.logger.error('No available seats retrieved from the response.')
                         raise NoAvailableSeatsException
                     self.logger.info(f'Available seats: {available_seats}.')
                     return available_seats
                 raise NoAvailableSeatsException
             except NoAvailableSeatsException as ex:
-                raise
+                self.logger.error(msg=f'{ex}. Retrying...')
             except Exception as ex:
                 self.logger.error(msg=ex)
-                self.logger.debug(msg=f'Sleep {delay} second and retry...')
-                time.sleep(delay)
+
+            self.logger.debug(msg=f'Sleep {delay} second(s) and retry...')
+            time.sleep(delay)
+        raise NoAvailableSeatsException
 
     def __filter_priority_seats(self, available_seats: list[int]) -> None:
         """
