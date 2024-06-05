@@ -10,12 +10,9 @@ class LessonsManager:
     """
     Manager class to read and handle the lessons from project holmes_lessons.yaml file.
     """
-    FILE_NAME = 'holmes_lessons.yaml'
-
-    def __init__(self, lessons_file_path=None):
+    def __init__(self,):
         """
         Initializes the LessonsManager class.
-        :param lessons_file_path: str: Path to the YAML file containing lessons information.
         Default is 'holmes_lessons.yaml' in the root directory.
         """
         self.loader = LessonsLoader()

@@ -40,7 +40,7 @@ class LessonRegistrationManager:
     """
 
     def __init__(self, user_data_service: UserDataService, api: HolmesPlaceAPI, lesson: dict, seats: list[int],
-                 notifier: INotification = None):
+                 notifier: INotification = None, registration_timeout: int = 3):
         """
         Initializes the LessonRegistrationManager instance.
         :param user_data_service: user data.
@@ -49,6 +49,8 @@ class LessonRegistrationManager:
         :param seats: list[int]: Priority list of seat numbers the user wants to register with.
         :param notifier: An instance of a class that implements the INotification interface.
         This is used to send notifications regarding the registration process.
+        :param registration_timeout: int: The timeout period (in minutes) for the registration attempt.
+         If registration does not succeed within this period, a RegistrationTimeoutException is raised.
         """
         self.__validate_input(lesson=lesson, seats=seats)
         self.user_data_service = user_data_service
@@ -58,6 +60,7 @@ class LessonRegistrationManager:
         self.seats = seats
         self.__initialize_logger_manager()
         self.notifier = notifier
+        self.registration_timeout = registration_timeout
 
     def __repr__(self):
         return f'Start the registration process for the \'{self.lesson["type"].upper()}\' lesson' \
@@ -121,10 +124,20 @@ class LessonRegistrationManager:
         Logs out the user from the system.
         :return: None
         """
-        time.sleep(2)
-        self.api.logout()
-        self._is_logged_in = False
-        self.logger.info(f'User \'{self.user_data_service.user}\' successfully logged out.')
+        retry_count = 0
+        while retry_count < 5:
+            try:
+                time.sleep(2)
+                self.api.logout()
+                self._is_logged_in = False
+                self.logger.info(f'User \'{self.user_data_service.user}\' successfully logged out.')
+
+                # Exit the function if logout is successful.
+                return
+            except Exception as ex:
+                retry_count += 1
+                self.logger.error(f'Error occurred during logout: {ex}. Retrying... (Attempt {retry_count}/5)')
+                time.sleep(random.randint(3, 10))
 
     def __send_remainder(self, seat: int):
         try:
@@ -251,7 +264,7 @@ class LessonRegistrationManager:
         except Exception:
             raise
 
-    def __wait_n_seconds_before_registration_start(self, seconds_before: int = 3) -> None:
+    def __wait_n_seconds_before_registration_start(self, seconds_before: int = 2) -> None:
         """
         Waits for a specified number of seconds before the lesson's registration start time.
         :param seconds_before: The number of seconds to wait before the lesson's registration starts. Default is 30 seconds.
@@ -288,7 +301,7 @@ class LessonRegistrationManager:
         """
         available_seats = self.__extract_available_seats()
         try:
-            self.__filter_priority_seats(available_seats=available_seats)
+            # self.__filter_priority_seats(available_seats=available_seats)
             seat = self.seats.pop(0)
         except UserPreferredSeatsOccupiedException:
             self.logger.warning(msg='All user\'s preferred seats are occupied. Selecting a random seat.')
@@ -321,14 +334,13 @@ class LessonRegistrationManager:
             available_seats = self.__extract_available_seats()
         raise Exception('Failed to register for the lesson.')
 
-    def __wait_until_registration_starts(self, seat: int, timeout: int = 3) -> None:
+    def __wait_until_registration_starts(self, seat: int) -> None:
         """
         Waits until the lesson registration begins.
         :param seat: int: The seat number to register with.
-        :param timeout: int: Maximum wait time in minutes.
         :return: None
         """
-        end_time = time.time() + timeout * 60
+        end_time = time.time() + self.registration_timeout * 60
         self.logger.info(
             f'Waiting for \'{self.lesson["type"]}\' registration to start. Attempt to register for seat number {seat}.')
 
@@ -350,7 +362,7 @@ class LessonRegistrationManager:
             except Exception as ex:
                 self.logger.error(ex)
         raise RegistrationTimeoutException(
-            f'Failed to register for lesson \'{self.lesson["type"]}\'  within {timeout} minute(s).')
+            f'Failed to register for lesson \'{self.lesson["type"]}\'  within {self.registration_timeout} minute(s).')
 
     def __try_to_register_lesson(self, seat: int) -> bool:
         """
@@ -372,7 +384,7 @@ class LessonRegistrationManager:
     def __extract_available_seats(self, retries: int = 5, delay: int = 1) -> list[int]:
         """
         Extracts available seat numbers from the given API response.
-        :param retries: int: Number of retries in case of failure. Default is 3.
+        :param retries: int: Number of retries in case of failure. Default is 5.
         :param delay: int: Delay between retries in seconds. Default is 1 second.
         :return: list[int]: A list of available seat numbers.
         """
@@ -382,20 +394,22 @@ class LessonRegistrationManager:
             try:
                 response = self.api.get_available_seats(params=self.lesson)
                 data = response.json()
-                if data.get("success"):
-                    available_seats = [int(seat) for seat in json.loads(data.get("availableSeats", "[]"))]
+                if data.get('success'):
+                    available_seats = [int(seat) for seat in json.loads(data.get('availableSeats', '[]'))]
                     if not available_seats:
-                        self.logger.error("No available seats retrieved from the response.")
+                        self.logger.error('No available seats retrieved from the response.')
                         raise NoAvailableSeatsException
                     self.logger.info(f'Available seats: {available_seats}.')
                     return available_seats
                 raise NoAvailableSeatsException
             except NoAvailableSeatsException as ex:
-                raise
+                self.logger.error(msg=f'{ex}. Retrying...')
             except Exception as ex:
                 self.logger.error(msg=ex)
-                self.logger.debug(msg=f'Sleep {delay} second and retry...')
-                time.sleep(delay)
+
+            self.logger.debug(msg=f'Sleep {delay} second(s) and retry...')
+            time.sleep(delay)
+        raise NoAvailableSeatsException
 
     def __filter_priority_seats(self, available_seats: list[int]) -> None:
         """

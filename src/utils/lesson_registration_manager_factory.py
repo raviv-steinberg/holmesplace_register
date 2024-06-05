@@ -32,13 +32,18 @@ class LessonRegistrationManagerFactory:
         necessary parameters and setting up the required dependencies.
         :return: LessonRegistrationManager: Configured instance of the LessonRegistrationManager.
         """
-        registration_params_service = RegistrationParamsService(club_id=self.user_data_service.club_id, lesson_id=self.lesson_id, lessons_manager=LessonsManager(), yaml_reader=YAMLHandler())
+        registration_params_service = RegistrationParamsService(
+            club_id=self.user_data_service.club_id,
+            lesson_id=self.lesson_id,
+            lessons_manager=LessonsManager(),
+            yaml_reader=YAMLHandler())
         params = registration_params_service.get_registration_params()
         return LessonRegistrationManager(
             user_data_service=self.user_data_service,
             lesson=params,
             api=HolmesPlaceAPI(),
-            seats=self.__get_seats_by_lesson_id())
+            seats=self.__get_seats_by_lesson_id(),
+            registration_timeout=1)
 
     def __get_seats_by_lesson_id(self) -> list:
         """
@@ -54,4 +59,3 @@ class LessonRegistrationManagerFactory:
                 elif isinstance(seats, int):
                     return [seats]
         return []
-

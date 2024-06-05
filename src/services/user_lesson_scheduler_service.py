@@ -57,7 +57,7 @@ class UserLessonSchedulerService:
                         break
         return upcoming_lessons
 
-    def monitor_registration_time(self, threshold_minutes: int = 3) -> tuple:
+    def retrieve_next_lesson(self, threshold_minutes: int = 3) -> dict:
         """
         Continuously monitors the closest lesson registration time.
         Whenever a lesson's registration time is found to be a specific number
@@ -68,8 +68,32 @@ class UserLessonSchedulerService:
         Returns (None, None) if no lesson meets the criteria.
         """
         return next(
-            (lesson_tuple for lesson_tuple in self.get_upcoming_lessons() if lesson_tuple[1] <= threshold_minutes),
-            (None, None))
+            (self.lessons_manager.retrieve_lesson_details(lesson_id=lesson_tuple[0]) for lesson_tuple in
+             self.get_upcoming_lessons() if lesson_tuple[1] <= threshold_minutes), None)
+
+    def monitor_registration_time_(self, threshold_minutes: int = 3) -> tuple:
+        """
+        Continuously monitors the closest lesson registration time.
+        Whenever a lesson's registration time is found to be a specific number
+         of minutes away (default 3 minutes), it returns that lesson's ID.
+        :param threshold_minutes: The number of minutes away from
+         registration to trigger an alert and return the lesson ID.
+        :return: A tuple containing the lesson's ID and the time remaining until registration (in minutes).
+        Returns (None, None) if no lesson meets the criteria.
+        """
+        upcoming_lessons = self.get_upcoming_lessons()
+        if not upcoming_lessons:
+            return None, None
+
+        # Find the lesson with the smallest time until registration
+        closest_lesson = min(upcoming_lessons, key=lambda x: x[1])
+
+        # If the closest lesson is within the threshold, return it
+        if closest_lesson[1] <= threshold_minutes:
+            return closest_lesson
+
+        # Return the closest lesson regardless of the threshold
+        return closest_lesson
 
     def __calculate_time_until(self, registration_day: str, registration_time: time) -> float:
         """

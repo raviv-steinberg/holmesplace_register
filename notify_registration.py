@@ -32,7 +32,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     user_lesson_scheduler_service = UserLessonSchedulerService(UserDataService(filepath=args.user_data_file))
-    lesson_tuple = user_lesson_scheduler_service.monitor_registration_time(threshold_minutes=args.threshold)
+    lesson_tuple = user_lesson_scheduler_service.retrieve_next_lesson(threshold_minutes=args.threshold)
     sys.stdout.write(json.dumps(lesson_tuple))
     sys.stdout.flush()
     sys.exit(0)

@@ -1,5 +1,6 @@
 import time
 
+from classes import LESSON
 from src.enums.lesson_type import LessonType
 from src.services.user_data_service import UserDataService
 from src.services.user_lesson_scheduler_service import UserLessonSchedulerService
@@ -18,16 +19,16 @@ days_of_week = {
 }
 
 if __name__ == "__main__":
+    les = LESSON.Feldenkrais.On.Wednesday.AT_1015
     # Exception: (36) השיעור מלא.
     threshold = 37565756756
     sleep_time = 60
-    source_user_data_file = 'users_data/raviv.yaml'
+    source_user_data_file = 'users_data/yarden.yaml'
     service = UserDataService(filepath=source_user_data_file)
     user_lesson_scheduler_service = UserLessonSchedulerService(user_data_service=service)
-    lesson_id, minutes = user_lesson_scheduler_service.monitor_registration_time(threshold_minutes=threshold)
+    lesson_id, minutes = user_lesson_scheduler_service.retrieve_next_lesson(threshold_minutes=threshold)
     if lesson_id:
-        manager = LessonRegistrationManagerFactory(user_data_service=service, lesson_id=lesson_id).get()
-        rotated_date_str = "/".join(manager.lesson["date"].split("/")[::-1])
+        manager = LessonRegistrationManagerFactory(user_data_service=service, lesson_id=les).get()
         manager.register_lesson()
 
     # while True:
@@ -36,23 +37,23 @@ if __name__ == "__main__":
     #         manager = LessonRegistrationManagerFactory(user_data_service=service, lesson_id=lesson_id).get()
     #         rotated_date_str = "/".join(manager.lesson["date"].split("/")[::-1])
     #         manager.register_lesson()
-            # day = days_of_week[manager.lesson['day'].upper()]
-            # messages = [
-            #     f'הרישום לשיעור {LessonType.get_hebrew_name(english_name=manager.lesson["type"].upper())} בוצע בהצלחה! 🎉',
-            #     f'',
-            #     f'פרטי השיעור:',
-            #     f'------------',
-            #     f'יום: {day}',
-            #     f'תאריך: {rotated_date_str}',
-            #     f'שעה: {DateUtils.convert_time_format(time_str=manager.lesson["start_time"])}',
-            #     'מקום מספר: *4*',
-            #     'נשמח לראותך בשיעור! 💪']
-            #
-            # WhatsappService.send_message(
-            #     contact_name=manager.user_data_service.whatsapp_group_name,
-            #     message='\n'.join(messages))
-        # else:
-        #     print(
-        #         f'[{DateUtils.current_time()}]: No lesson found that starts within {threshold} minutes, sleep {sleep_time} seconds and retry...')
-        #     time.sleep(sleep_time)
-        # break
+    # day = days_of_week[manager.lesson['day'].upper()]
+    # messages = [
+    #     f'הרישום לשיעור {LessonType.get_hebrew_name(english_name=manager.lesson["type"].upper())} בוצע בהצלחה! 🎉',
+    #     f'',
+    #     f'פרטי השיעור:',
+    #     f'------------',
+    #     f'יום: {day}',
+    #     f'תאריך: {rotated_date_str}',
+    #     f'שעה: {DateUtils.convert_time_format(time_str=manager.lesson["start_time"])}',
+    #     'מקום מספר: *4*',
+    #     'נשמח לראותך בשיעור! 💪']
+    #
+    # WhatsappService.send_message(
+    #     contact_name=manager.user_data_service.whatsapp_group_name,
+    #     message='\n'.join(messages))
+    # else:
+    #     print(
+    #         f'[{DateUtils.current_time()}]: No lesson found that starts within {threshold} minutes, sleep {sleep_time} seconds and retry...')
+    #     time.sleep(sleep_time)
+    # break
