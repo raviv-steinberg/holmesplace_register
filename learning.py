@@ -26,6 +26,7 @@ def reverse_number(num: int):
 
 def roman_to_int(roman: str) -> int:
     roman_values = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
+
     result = 0
     prev_value = 0
 
@@ -123,6 +124,7 @@ def count_digits_recursive(num: int) -> int:
 
 def max_profit(numbers: list) -> int:
     profit = 0
+
     if numbers is None or len(numbers) == 0:
         return profit
 
@@ -130,9 +132,52 @@ def max_profit(numbers: list) -> int:
     for num in numbers:
         if num < min_num:
             min_num = num
-        if num - min_num > profit:
-            profit = num - min_num
+        else:
+            if num - min_num > profit:
+                profit = num - min_num
     return profit
+
+
+def fibonacci(num: int) -> int:
+    if num < 0:
+        raise Exception('Invalid input')
+
+    a = 0
+    b = 1
+    if num == 0:
+        return a
+    elif num == 1:
+        return b
+
+    for i in range(1, num):
+        c = a + b
+        a = b
+        b = c
+    return b
+
+
+def fibonacci_recursive(num: int) -> int:
+    if num < 0:
+        raise Exception('Invalid input')
+    elif num == 0:
+        return 0
+    elif num == 1 or num == 2:
+        return 1
+    return fibonacci_recursive(num - 1) + fibonacci_recursive(num - 2)
+
+
+def add_one(l: list) -> list:
+    length = len(l) - 1
+
+    while length >= 0 and l[length] == 9:
+        l[length] = 0
+        length -= 1
+
+    if length >= 0:
+        l[length] += 1
+    else:
+        l.insert(0, 1)
+    return l
 
 
 # print(reverse_string('raviv'))
@@ -147,5 +192,8 @@ def max_profit(numbers: list) -> int:
 # print(string_to_occurrences('ccgerr'))
 # print(occurrences_to_string('c2g1e1r2'))
 # print(string_to_int('1234'))
-print(count_digits_recursive(1234))
-print(max_profit(numbers=[3, 1, 10, 16, 6, 22]))
+# print(count_digits_recursive(1234))
+# print(max_profit(numbers=[3, 1, 10, 16, 6]))
+# print(fibonacci(2))
+# print(fibonacci_recursive(2))
+print(add_one([1, 2, 9]))
